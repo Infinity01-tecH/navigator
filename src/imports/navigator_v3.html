@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Navigator — Master any skill. No more guessing.</title>
+  <meta name="description" content="Navigator turns &quot;I want to learn X&quot; into a structured, checkpoint-verified roadmap with proof of progress." />
+
+  <meta property="og:title" content="Navigator — Master any skill. No more guessing." />
+  <meta property="og:description" content="A personalized learning roadmap built from real, verified resources — with streaks, XP, quiz gates and a projected finish date." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600;700&family=Fraunces:ital,wght@1,200;1,300&display=swap" />
+
+  <link rel="stylesheet" href="navigator_v3.css" />
+</head>
+<body>
+<nav>
+  <div class="nav-wipe" aria-hidden="true"></div>
+  <a href="#" class="nav-logo">
+    <span>n<svg class="logo-swoosh" viewBox="0 0 484 373" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M 481 94 L 406 1 L 339 96 L 342 110 L 355 113 L 388 80 L 398 148 L 398 191 L 390 237 L 377 267 L 357 291 L 326 309 L 306 311 L 284 299 L 255 263 L 176 113 L 135 53 L 98 26 L 77 24 L 59 30 L 25 65 L 11 99 L 2 144 L 4 252 L 27 335 L 52 363 L 78 370 L 100 369 L 150 350 L 203 309 L 241 347 L 284 368 L 331 371 L 378 356 L 418 323 L 443 271 L 446 202 L 437 80 L 463 112 L 479 111 Z M 96 116 L 102 116 L 105 118 L 115 132 L 127 158 L 129 165 L 132 170 L 136 182 L 139 187 L 141 194 L 154 222 L 154 224 L 167 251 L 177 268 L 177 270 L 174 274 L 157 290 L 138 301 L 123 305 L 108 305 L 94 301 L 89 296 L 84 286 L 80 271 L 79 261 L 78 260 L 77 245 L 76 244 L 76 232 L 75 231 L 75 182 L 76 181 L 76 170 L 77 169 L 78 155 L 79 154 L 79 150 L 83 134 L 89 122 Z"/></svg>igator</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#navi">Navi</a></li>
+    <li><a href="#immersive">Immersive</a></li>
+    <li><a href="#waitlist">Join waitlist</a></li>
+    <li><a href="#" class="nav-cta" id="getStartedBtn">Get started free</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-grid-lines"></div>
+  <div class="hero-diagonal"></div>
+
+  <h1 class="hero-headline" id="heroHeadline">
+    <span class="hl-row">
+      <span class="hl-line" id="hlLine1">Master</span>
+      <em class="hl-line" id="hlAny">any</em> <span class="skill-wrap" id="skillWrap">
+        <span class="hl-mask-line" id="hlMask2">
+          <em class="hl-line" id="hlLine2">skill</em>
+        </span>
+      </span>
+    </span>
+    <span class="hl-row">
+      <span class="outline hl-line" id="hlLine3">No more</span>
+      <span class="hl-mask-line" id="hlMask4">
+        <span class="hl-line" id="hlLine4">guessing</span>
+      </span>
+    </span>
+  </h1>
+
+  
+
+</section>
+
+
+<!-- Why Navigator (overlaps the hero on scroll) -->
+<div class="why-runway">
+<section class="why" id="why">
+  <div class="why-inner">
+    <div class="why-label">Why I made Navigator</div>
+    <p class="why-text">
+      I built Navigator because skill-learning felt scattered and directionless — people didn't know what to learn next or how it connected to real goals.
+      <span id="whyRoadmapLine">I wanted a <em>detailed roadmap</em> that turns "I want to learn X" into a structured, checkpoint-verified path with actual proof of progress.</span>
+    </p>
+
+    <!-- Doodle markers: circle = person scrolling YouTube + confused headshake,
+         triangle = YouTube badge, square = Reddit/Google. All fade in together
+         once the hero has fully scrolled away (same moment the nav bar goes white). -->
+    <div class="why-doodle why-doodle-circle" data-why-doodle aria-hidden="true">
+      <div class="why-doodle-shape why-doodle-circle-shape">
+        <video autoplay loop muted playsinline>
+          <source src="videos/confused-guy.webm" type="video/webm">
+          <source src="videos/confused-guy.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+
+    <div class="why-doodle why-doodle-triangle" data-why-doodle aria-hidden="true">
+      <div class="why-doodle-yt-badge">
+        <svg viewBox="0 0 28 20" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#FF0000" d="M27.4 3.1A3.5 3.5 0 0 0 24.9.6C22.7 0 14 0 14 0S5.3 0 3.1.6A3.5 3.5 0 0 0 .6 3.1C0 5.3 0 10 0 10s0 4.7.6 6.9a3.5 3.5 0 0 0 2.5 2.5C5.3 20 14 20 14 20s8.7 0 10.9-.6a3.5 3.5 0 0 0 2.5-2.5C28 14.7 28 10 28 10s0-4.7-.6-6.9z"/>
+          <path fill="#fff" d="M11.2 14.3 18.5 10l-7.3-4.3z"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="why-doodle why-doodle-square" data-why-doodle aria-hidden="true">
+      <span class="why-mark mark-reddit">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="12" fill="#FF4500"/>
+          <path fill="#fff" d="M19.9 12a1.7 1.7 0 0 0-2.88-1.2 8.4 8.4 0 0 0-4.55-1.44l.77-3.63 2.52.54a1.22 1.22 0 1 0 .14-.83l-2.92-.62a.4.4 0 0 0-.48.31l-.9 4.23A8.4 8.4 0 0 0 6.98 10.8 1.7 1.7 0 1 0 5.1 13.6a3.3 3.3 0 0 0-.04.53c0 2.68 3.12 4.85 6.96 4.85s6.96-2.17 6.96-4.85a3.3 3.3 0 0 0-.04-.53c.58-.29.96-.9.96-1.6zM8.1 13.2a1.22 1.22 0 1 1 2.44 0 1.22 1.22 0 0 1-2.44 0zm6.9 3.28c-.84.84-2.45.9-2.92.9s-2.08-.07-2.92-.9a.32.32 0 0 1 .45-.45c.53.53 1.66.72 2.47.72s1.94-.19 2.47-.72a.32.32 0 0 1 .45.45zm-.22-2.05a1.22 1.22 0 1 1 0-2.44 1.22 1.22 0 0 1 0 2.44z"/>
+        </svg>
+      </span>
+      <span class="why-mark mark-google">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.99.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+      </span>
+    </div>
+
+    <!-- Phase 2: winding roadmap arrow with glowing checkpoints, right side.
+         Draws itself as the "detailed roadmap" line is reached. -->
+    <div class="why-doodle why-roadmap-arrow" data-why-doodle data-why-doodle-phase2 aria-hidden="true">
+      <svg viewBox="0 0 180 360" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="roadmapArrowHead" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto" markerUnits="strokeWidth">
+            <path d="M0 0 L8 4 L0 8 Z" fill="#1C1C1C"/>
+          </marker>
+        </defs>
+        <path class="why-roadmap-arrow-path"
+              d="M36 10 C 150 4 176 74 116 116 C 62 154 8 158 22 216 C 34 268 138 252 142 314"
+              fill="none" stroke="#1C1C1C" stroke-width="2.5" stroke-linecap="round"
+              marker-end="url(#roadmapArrowHead)"/>
+        <circle class="why-roadmap-dot" data-at="0.28" cx="150" cy="52" r="5"/>
+        <circle class="why-roadmap-dot" data-at="0.58" cx="30" cy="182" r="5"/>
+        <circle class="why-roadmap-dot" data-at="0.86" cx="86" cy="263" r="5"/>
+      </svg>
+    </div>
+
+    <div class="why-meta">
+      <span>Founder note</span>
+      <span>Navigator, 2026</span>
+    </div>
+  </div>
+</section>
+</div>
+
+
+
+<!-- How it works: black curtain wipes in from the right, then the 3 steps land -->
+<div class="how-runway" id="howRunway">
+  <div class="how-curtain">
+    <div class="how-wipe" id="howWipe" aria-hidden="true"></div>
+
+    <section class="how" id="how">
+      <div class="how-caption" id="howCaption"><span class="dot"></span><span id="howCaptionText"></span></div>
+      <div class="how-inner">
+        <div class="how-heading-stage how-rise" data-how-step="0">
+          <div class="how-heading">How does<br>Navigator<br>actually work?</div>
+        </div>
+
+        <div class="how-phone-stage how-rise" data-how-step="1">
+          <div class="phone">
+            <div class="phone-notch"></div>
+            <div class="phone-screen" id="phoneScreen">
+              <div class="app-screen-form">
+                <div class="app-screen">
+                  <div class="app-topbar">
+                    <div class="app-brand">
+                      <div class="app-brand-sq app-brand-round">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#1C1C1C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
+                      </div>
+                      <div class="app-brand-name">Navigator</div>
+                    </div>
+                    <div class="app-signin">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+                      Sign in
+                    </div>
+                  </div>
+
+                  <div class="app-h1">What do you want<br>to learn?</div>
+                  <div class="app-sub">Build a personalized roadmap in 2 minutes.</div>
+
+                  <div class="app-label">LEARNING TYPE</div>
+                  <div class="app-type-row">
+                    <div class="app-type-card active">
+                      <div class="app-type-title">Skill</div>
+                      <div class="app-type-sub">e.g. React, Python</div>
+                    </div>
+                    <div class="app-type-card">
+                      <div class="app-type-title">Subject</div>
+                      <div class="app-type-sub">e.g. Computer Science</div>
+                    </div>
+                  </div>
+
+                  <div class="app-label">MODE</div>
+                  <div class="app-mode-list">
+                    <div class="app-mode-card active">
+                      <div class="app-mode-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#1C1C1C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z"/><path d="M8 2v16M16 6v16"/></svg>
+                      </div>
+                      <div class="app-mode-text">
+                        <div class="app-mode-title">Full Roadmap</div>
+                        <div class="app-mode-sub">Personalized multi-phase curriculum</div>
+                      </div>
+                      <div class="app-mode-check">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#1C1C1C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                      </div>
+                    </div>
+                    <div class="app-mode-card">
+                      <div class="app-mode-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#1C1C1C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                      </div>
+                      <div class="app-mode-text">
+                        <div class="app-mode-title">Sprint Blueprint</div>
+                        <div class="app-mode-sub">Intensive 1&ndash;4 week focused plan</div>
+                      </div>
+                      <div class="app-mode-check"></div>
+                    </div>
+                    <div class="app-mode-card">
+                      <div class="app-mode-icon">
+                        <svg viewBox="0 0 24 24" fill="#1C1C1C" stroke="none"><path d="M8 5v14l11-7z"/></svg>
+                      </div>
+                      <div class="app-mode-text">
+                        <div class="app-mode-title">YouTube-Based</div>
+                        <div class="app-mode-sub">Built around creators you already trust</div>
+                      </div>
+                      <div class="app-mode-check"></div>
+                    </div>
+                  </div>
+
+                  <div class="app-label">SKILL</div>
+                  <div class="app-skill-input">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#1C1C1C" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+                    <span>e.g. React Development</span>
+                  </div>
+
+                  <div class="app-cta">Build My Roadmap</div>
+                </div>
+              </div>
+
+              <div class="app-screen-quiz">
+                <div class="app-screen">
+                  <div class="app-quiz-topbar">
+                    <div class="app-quiz-back">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                    </div>
+                  </div>
+
+                  <div class="app-quiz-bar"><div class="app-quiz-bar-fill" id="quizProgressFill" style="width:10%"></div></div>
+
+                  <div class="app-quiz-label">QUICK CHECK</div>
+                  <div class="app-quiz-q" id="quizQ">When learning something new, you prefer to&hellip;</div>
+
+                  <div class="app-quiz-options" id="quizOptions">
+                    <div class="app-quiz-option active">
+                      <div class="app-quiz-option-badge"><span class="app-quiz-option-letter">A</span></div>
+                      <div class="app-quiz-option-text">Read documentation and articles thoroughly</div>
+                    </div>
+                    <div class="app-quiz-option">
+                      <div class="app-quiz-option-badge"><span class="app-quiz-option-letter">B</span></div>
+                      <div class="app-quiz-option-text">Watch video tutorials and follow along</div>
+                    </div>
+                    <div class="app-quiz-option">
+                      <div class="app-quiz-option-badge"><span class="app-quiz-option-letter">C</span></div>
+                      <div class="app-quiz-option-text">Jump in and build something immediately</div>
+                    </div>
+                    <div class="app-quiz-option">
+                      <div class="app-quiz-option-badge"><span class="app-quiz-option-letter">D</span></div>
+                      <div class="app-quiz-option-text">Follow a structured course from start to finish</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="app-screen-level">
+                <div class="app-screen">
+                  <div class="app-quiz-topbar">
+                    <div class="app-quiz-back">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                      Back
+                    </div>
+                  </div>
+
+                  <div class="app-quiz-label">SKILL LEVEL</div>
+                  <div class="app-quiz-q">Where are you right now?</div>
+                  <div class="app-sub" style="margin-top:-8px;">This helps us calibrate how much ground your roadmap needs to cover.</div>
+
+                  <div class="app-level-list">
+                    <div class="app-level-card">
+                      <div class="app-level-num">0</div>
+                      <div class="app-level-text">
+                        <div class="app-level-title">Complete beginner</div>
+                        <div class="app-level-sub">Haven&rsquo;t touched it yet</div>
+                      </div>
+                    </div>
+                    <div class="app-level-card active">
+                      <div class="app-level-num">1</div>
+                      <div class="app-level-text">
+                        <div class="app-level-title">Know the basics</div>
+                        <div class="app-level-sub">Familiar with fundamentals</div>
+                      </div>
+                      <div class="app-level-check">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#1C1C1C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                      </div>
+                    </div>
+                    <div class="app-level-card">
+                      <div class="app-level-num">2</div>
+                      <div class="app-level-text">
+                        <div class="app-level-title">Intermediate</div>
+                        <div class="app-level-sub">Built a few projects</div>
+                      </div>
+                    </div>
+                    <div class="app-level-card">
+                      <div class="app-level-num">3</div>
+                      <div class="app-level-text">
+                        <div class="app-level-title">Advanced</div>
+                        <div class="app-level-sub">Comfortable with complex patterns</div>
+                      </div>
+                    </div>
+                    <div class="app-level-card">
+                      <div class="app-level-num">4</div>
+                      <div class="app-level-text">
+                        <div class="app-level-title">Expert</div>
+                        <div class="app-level-sub">Could teach this to others</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="app-level-cta">Continue</div>
+                </div>
+              </div>
+
+              <div class="app-screen-craft">
+                <div class="app-screen">
+                  <div class="app-craft-wrap">
+                    <div class="app-box-preloader" role="status" aria-label="Building your roadmap">
+                      <span class="app-loader-box" style="--box-index:0">0</span>
+                      <span class="app-loader-box" style="--box-index:1">1</span>
+                      <span class="app-loader-box" style="--box-index:2">2</span>
+                      <span class="app-loader-box" style="--box-index:3">3</span>
+                      <span class="app-loader-box" style="--box-index:4">4</span>
+                      <span class="app-loader-core"><svg class="logo-swoosh" viewBox="0 0 484 373" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M 481 94 L 406 1 L 339 96 L 342 110 L 355 113 L 388 80 L 398 148 L 398 191 L 390 237 L 377 267 L 357 291 L 326 309 L 306 311 L 284 299 L 255 263 L 176 113 L 135 53 L 98 26 L 77 24 L 59 30 L 25 65 L 11 99 L 2 144 L 4 252 L 27 335 L 52 363 L 78 370 L 100 369 L 150 350 L 203 309 L 241 347 L 284 368 L 331 371 L 378 356 L 418 323 L 443 271 L 446 202 L 437 80 L 463 112 L 479 111 Z M 96 116 L 102 116 L 105 118 L 115 132 L 127 158 L 129 165 L 132 170 L 136 182 L 139 187 L 141 194 L 154 222 L 154 224 L 167 251 L 177 268 L 177 270 L 174 274 L 157 290 L 138 301 L 123 305 L 108 305 L 94 301 L 89 296 L 84 286 L 80 271 L 79 261 L 78 260 L 77 245 L 76 244 L 76 232 L 75 231 L 75 182 L 76 181 L 76 170 L 77 169 L 78 155 L 79 154 L 79 150 L 83 134 L 89 122 Z"/></svg></span>
+                    </div>
+                    <div class="app-craft-title">Building your roadmap</div>
+                    <div class="app-craft-sub">Matching the right resources to your level</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="relay-loader" id="relayLoader">
+              <div class="relay-loader-ring" id="relayRing"></div>
+              <svg class="logo-swoosh" viewBox="0 0 484 373" aria-hidden="true"><path fill-rule="evenodd" d="M 481 94 L 406 1 L 339 96 L 342 110 L 355 113 L 388 80 L 398 148 L 398 191 L 390 237 L 377 267 L 357 291 L 326 309 L 306 311 L 284 299 L 255 263 L 176 113 L 135 53 L 98 26 L 77 24 L 59 30 L 25 65 L 11 99 L 2 144 L 4 252 L 27 335 L 52 363 L 78 370 L 100 369 L 150 350 L 203 309 L 241 347 L 284 368 L 331 371 L 378 356 L 418 323 L 443 271 L 446 202 L 437 80 L 463 112 L 479 111 Z M 96 116 L 102 116 L 105 118 L 115 132 L 127 158 L 129 165 L 132 170 L 136 182 L 139 187 L 141 194 L 154 222 L 154 224 L 167 251 L 177 268 L 177 270 L 174 274 L 157 290 L 138 301 L 123 305 L 108 305 L 94 301 L 89 296 L 84 286 L 80 271 L 79 261 L 78 260 L 77 245 L 76 244 L 76 232 L 75 231 L 75 182 L 76 181 L 76 170 L 77 169 L 78 155 L 79 154 L 79 150 L 83 134 L 89 122 Z"/></svg>
+            </div>
+
+            <div class="relay-roadmap" id="relayRoadmap">
+              <div class="relay-rm-scroll" id="relayRmScroll">
+                <div class="relay-rm-card">
+                  <div class="relay-rm-head">
+                    <div class="relay-rm-num">1</div>
+                    <div style="flex:1">
+                      <div class="relay-rm-title">Foundations</div>
+                      <div class="relay-rm-meta">1/5 steps · 10.5h</div>
+                    </div>
+                    <div class="relay-rm-bar"><i id="relayRmBar"></i></div>
+                  </div>
+                  <div class="relay-rm-rows" id="relayRmRows">
+                    <div class="relay-rm-row done">
+                      <div class="relay-rm-check">✓</div>
+                      <div style="flex:1">
+                        <div class="relay-rm-lesson">Introduction to TypeScript and Setup</div>
+                        <div class="relay-rm-tags"><span class="relay-rm-watch">▤ Watch</span><span class="relay-rm-time">◕ 1.5h</span></div>
+                      </div>
+                    </div>
+                    <div class="relay-rm-row">
+                      <div class="relay-rm-check"></div>
+                      <div style="flex:1">
+                        <div class="relay-rm-lesson">Basic Types and Variables</div>
+                        <div class="relay-rm-tags"><span class="relay-rm-watch">▤ Watch</span><span class="relay-rm-time">◕ 2h</span></div>
+                      </div>
+                    </div>
+                    <div class="relay-rm-row">
+                      <div class="relay-rm-check"></div>
+                      <div style="flex:1">
+                        <div class="relay-rm-lesson">Functions and Interfaces</div>
+                        <div class="relay-rm-tags"><span class="relay-rm-watch">▤ Watch</span><span class="relay-rm-time">◕ 2h</span></div>
+                      </div>
+                    </div>
+                    <div class="relay-rm-row">
+                      <div class="relay-rm-check"></div>
+                      <div style="flex:1">
+                        <div class="relay-rm-lesson">Classes and Object-Oriented Basics</div>
+                        <div class="relay-rm-tags"><span class="relay-rm-watch">▤ Build</span><span class="relay-rm-time">◕ 3h</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="relay-rm-nav"><span>◹</span><span>◔</span><span class="on">▤</span><span>◯</span><span>☺</span></div>
+            </div>
+          </div>
+          
+            </div>
+          </div>
+        <div class="relay-integrated" id="relayIntegrated" aria-hidden="true">
+
+          <div class="relay-scaler" id="relayScaler">
+            <div class="relay-stage" id="relayStage">
+              <svg class="relay-links" viewBox="0 0 1000 620" width="1000" height="620" aria-hidden="true">
+          <g id="relayPaths"></g>
+          <circle id="relayPort" cx="292" cy="304" r="6" fill="#C8F135"/>
+          <circle id="relayPortPulse" cx="292" cy="304" r="6" fill="none" stroke="#C8F135" stroke-width="1.5" opacity="0.35"/>
+        </svg>
+              <div id="relayServers"></div>
+            </div>
+          </div>
+          <div class="relay-caption"><span class="dot"></span><span id="relayCaption">Preloader — sending your request out</span></div>
+        </div>
+
+        </div>
+
+      </div>
+    </section>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<!-- Section 4: Real content, never hallucinated -->
+<section class="real-content" id="real-content">
+  <div class="real-content-bg" aria-hidden="true"></div>
+  <div class="real-content-overlay" aria-hidden="true"></div>
+  <div class="real-content-grid">
+    <div class="real-content-figure reveal">
+      <img src="e43aeb7cf493.png" alt="Illustrated student in a hoodie marked with a 7, wearing glasses" width="1024" height="1024" loading="lazy">
+    </div>
+    <div class="real-content-inner reveal">
+    <div class="real-content-label">Trust block</div>
+    <h2>Real content, <em>never hallucinated.</em></h2>
+    <p class="real-content-lead">
+      After watching a roadmap get generated, the obvious question is: "Wait, are those links even real?" Here is the hard rule that makes the answer yes.
+    </p>
+    <ul class="real-content-rules">
+      <li>
+        <span class="rule-mark">1</span>
+        <span><strong>No fake links.</strong> The generator is not allowed to invent URLs, resources, or citations. If a video, article, or tool cannot be verified, it is not included.</span>
+      </li>
+      <li>
+        <span class="rule-mark">2</span>
+        <span><strong>Every resource resolves.</strong> Every item that ships in a roadmap either points to a real, reachable source or is removed before it ever reaches you.</span>
+      </li>
+      <li>
+        <span class="rule-mark">3</span>
+        <span><strong>This is a mechanism, not a claim.</strong> The verification step runs automatically. It is the reason you can trust what you are clicking, not a marketing line.</span>
+      </li>
+    </ul>
+    <p class="real-content-foot">
+      If a link is broken or a source disappears, the roadmap flags it. You never have to wonder whether what you are learning from actually exists.
+    </p>
+    </div>
+  </div>
+</section>
+
+<!-- Section 5: Retention system -->
+<section class="finish" id="finish">
+  <div class="finish-inner">
+
+    <div class="finish-head reveal">
+      <div class="finish-label">Retention system</div>
+      <h2>Most apps get you started.<br><em>Navigator gets you finished.</em></h2>
+      <p class="finish-lead">
+        Real links solve the trust problem. This solves the harder one — actually showing up tomorrow, and the day after that.
+      </p>
+    </div>
+
+    <!-- Beat 1: Streaks -->
+    <div class="finish-beat" id="beatStreak">
+      <div class="finish-beat-copy">
+        <div class="finish-beat-num">01</div>
+        <h3>A streak that survives a bad week.</h3>
+        <p>
+          Show up, the number climbs. Miss a day, freezes and grace days absorb it —
+          one missed evening never wipes six weeks of work. The point is momentum, not punishment.
+        </p>
+      </div>
+      <div class="finish-beat-visual">
+        <div class="stat-card streak-card">
+          <div class="stat-card-top">
+            <span class="stat-card-title">Current streak</span>
+            <span class="stat-chip">2 freezes left</span>
+          </div>
+          <div class="streak-count">
+            <span class="streak-flame" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2s5 4.5 5 9a5 5 0 0 1-10 0c0-1.5.6-2.8 1.4-3.8C9 9.5 10 11 11 11c0-3 1-6 1-9Z"/><path d="M8.5 15.5a3.5 3.5 0 0 0 7 0"/></svg>
+            </span>
+            <span class="streak-num" id="streakNum">0</span>
+            <span class="streak-unit">days</span>
+          </div>
+          <div class="streak-week" id="streakWeek">
+            <span class="sw-day" data-state="on">M</span>
+            <span class="sw-day" data-state="on">T</span>
+            <span class="sw-day" data-state="on">W</span>
+            <span class="sw-day" data-state="freeze">T</span>
+            <span class="sw-day" data-state="on">F</span>
+            <span class="sw-day" data-state="on">S</span>
+            <span class="sw-day" data-state="today">S</span>
+          </div>
+          <div class="stat-card-foot"><i></i>Thursday was covered by a freeze. Streak intact.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Beat 2: XP & levels -->
+    <div class="finish-beat reverse" id="beatXp">
+      <div class="finish-beat-copy">
+        <div class="finish-beat-num">02</div>
+        <h3>Momentum you can actually see.</h3>
+        <p>
+          Every completed step is 50&nbsp;XP. Every 1,000&nbsp;XP is a level.
+          Progress stops being a vague feeling and becomes a number that only moves one way.
+        </p>
+      </div>
+      <div class="finish-beat-visual">
+        <div class="stat-card xp-card">
+          <div class="stat-card-top">
+            <span class="stat-card-title">Level <b id="xpLevel">6</b></span>
+            <span class="stat-chip lime" id="xpGain">+50 XP</span>
+          </div>
+          <div class="xp-bar"><i id="xpBar"></i></div>
+          <div class="xp-meta">
+            <span id="xpNow">0 XP</span>
+            <span>1,000 XP to Level <b id="xpNext">7</b></span>
+          </div>
+          <div class="xp-steps">
+            <span class="xp-step done">Step complete</span>
+            <span class="xp-step done">Step complete</span>
+            <span class="xp-step" id="xpStepNew">Step complete</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Beat 3: Quiz gates -->
+    <div class="finish-beat" id="beatQuiz">
+      <div class="finish-beat-copy">
+        <div class="finish-beat-num">03</div>
+        <h3>Learn it, then prove it.</h3>
+        <p>
+          A Watch step isn't done because you clicked a checkbox — it's done when you pass a
+          quick quiz on what you just watched. No passive box-ticking, no fake progress.
+        </p>
+      </div>
+      <div class="finish-beat-visual">
+        <div class="stat-card quiz-card" id="quizGate">
+          <div class="stat-card-top">
+            <span class="stat-card-title">Checkpoint quiz</span>
+            <span class="stat-chip">Step 4 · Watch</span>
+          </div>
+          <div class="qg-q">What does <code>useEffect</code>'s dependency array control?</div>
+          <div class="qg-opts">
+            <span class="qg-opt">How often the component renders</span>
+            <span class="qg-opt is-answer">When the effect re-runs</span>
+            <span class="qg-opt">The order of hooks</span>
+          </div>
+          <div class="qg-result" id="qgResult">
+            <span class="qg-tick" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            </span>
+            Passed — step 4 marked complete
+          </div>
+          <div class="qg-lock" id="qgLock">Step stays locked until you pass</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Beat 4: Finish-date projection -->
+    <div class="finish-projection reverse reveal" id="beatDate">
+      <div class="fp-copy">
+        <div class="finish-beat-num">04</div>
+        <h3>And you'll know when you're done.</h3>
+        <p>
+          Navigator reads your real pace — not your optimistic plan — and projects a finish date
+          that updates as you go. A goal with a date on it is a goal you can actually keep.
+        </p>
+      </div>
+      <div class="fp-visual">
+        <div class="stat-card date-card">
+          <div class="stat-card-top">
+            <span class="stat-card-title">Projected finish</span>
+            <span class="stat-chip">Based on your pace</span>
+          </div>
+          <div class="fp-date" id="fpDate">Mar 14</div>
+          <div class="fp-sub">at 4 steps / week · 62% complete</div>
+          <div class="fp-track"><i id="fpTrack"></i><em>today</em></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Beat 5: Achievements — clockwise rotating badge wheel -->
+    <div class="finish-badges" id="finishBadges">
+      <div class="fb-tile" data-depth="0.4" style="--x:-12%; --y:-29%">
+        <span class="fb-medal silver"></span><b>Quiz Perfect</b><i>Silver</i>
+      </div>
+      <div class="fb-tile" data-depth="0.34" style="--x:12%; --y:-29%">
+        <span class="fb-medal gold"></span><b>Level 10</b><i>Gold</i>
+      </div>
+      <div class="fb-tile" data-depth="0.68" style="--x:29%; --y:-12%">
+        <span class="fb-medal legendary"></span><b>Roadmap Finished</b><i>Legendary</i>
+      </div>
+      <div class="fb-tile" data-depth="0.62" style="--x:29%; --y:12%">
+        <span class="fb-medal gold"></span><b>30-Day Streak</b><i>Gold</i>
+      </div>
+      <div class="fb-tile" data-depth="0.45" style="--x:12%; --y:29%">
+        <span class="fb-medal legendary"></span><b>100 Steps</b><i>Legendary</i>
+      </div>
+      <div class="fb-tile" data-depth="0.7" style="--x:-12%; --y:29%">
+        <span class="fb-medal silver"></span><b>Phase Cleared</b><i>Silver</i>
+      </div>
+      <div class="fb-tile" data-depth="0.28" style="--x:-29%; --y:12%">
+        <span class="fb-medal bronze"></span><b>7-Day Streak</b><i>Bronze</i>
+      </div>
+      <div class="fb-tile" data-depth="0.55" style="--x:-29%; --y:-12%">
+        <span class="fb-medal bronze"></span><b>First Step</b><i>Bronze</i>
+      </div>
+
+      <div class="fb-center">
+        <div class="finish-beat-num">05</div>
+        <h3>Milestones worth <em>chasing.</em></h3>
+        <p>
+          Tiered badges from Bronze to Legendary mark the moments that mattered —
+          and every one of them is shareable.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- Section 6: Three modes -->
+<section class="modes" id="modes">
+  <div class="modes-inner">
+
+    <div class="modes-head reveal">
+      <h2>Learn the way<br><em>you actually want to.</em></h2>
+    </div>
+
+    <div class="modes-stage reveal">
+      <div class="modes-phone-col">
+        <div class="modes-phone-hold">
+          <div class="phone modes-phone">
+            <div class="phone-notch"></div>
+            <div class="phone-screen" id="modesPhoneScreen">
+
+              <!-- Mode 0: Full Roadmap -->
+            <div class="modes-screen is-active" data-mode-screen="0">
+              <div class="relay-roadmap modes-relay-roadmap">
+                <div class="relay-rm-scroll" id="mdRmScroll">
+                  <div class="relay-rm-card" id="mdRmCard">
+                    <div class="relay-rm-head">
+                      <div class="relay-rm-num">1</div>
+                      <div style="flex:1">
+                        <div class="relay-rm-title">Foundations</div>
+                        <div class="relay-rm-meta">2/9 steps &middot; 14h</div>
+                      </div>
+                      <div class="relay-rm-bar"><i id="mdRmBar" style="width:22%"></i></div>
+                    </div>
+                    <div class="relay-rm-rows" id="mdRmRows">
+                      <div class="relay-rm-row done">
+                        <div class="relay-rm-check">✓</div>
+                        <div style="flex:1">
+                          <div class="relay-rm-lesson">Introduction &amp; environment setup</div>
+                          <div class="relay-rm-tags"><span class="relay-rm-watch relay-rm-watch-done">▤ Watch</span><span class="relay-rm-time">◕ 1.5h</span></div>
+                        </div>
+                      </div>
+                      <div class="relay-rm-row done">
+                        <div class="relay-rm-check">✓</div>
+                        <div style="flex:1">
+                          <div class="relay-rm-lesson">Core syntax and fundamentals</div>
+                          <div class="relay-rm-tags"><span class="relay-rm-watch relay-rm-watch-done">▤ Read</span><span class="relay-rm-time">◕ 2h</span></div>
+                        </div>
+                      </div>
+                      <div class="relay-rm-row relay-rm-row-active">
+                        <div class="relay-rm-check relay-rm-check-active"></div>
+                        <div style="flex:1">
+                          <div class="relay-rm-lesson relay-rm-lesson-active">Working with real data</div>
+                          <div class="relay-rm-tags"><span class="relay-rm-watch">▤ Watch</span><span class="relay-rm-time">◕ 2h</span></div>
+                        </div>
+                      </div>
+                      <div class="relay-rm-row">
+                        <div class="relay-rm-check"></div>
+                        <div style="flex:1">
+                          <div class="relay-rm-lesson">Building your first project</div>
+                          <div class="relay-rm-tags"><span class="relay-rm-watch">▤ Build</span><span class="relay-rm-time">◕ 3h</span></div>
+                        </div>
+                      </div>
+                      <div class="relay-rm-row">
+                        <div class="relay-rm-check"></div>
+                        <div style="flex:1">
+                          <div class="relay-rm-lesson">Advanced patterns &amp; best practices</div>
+                          <div class="relay-rm-tags"><span class="relay-rm-watch">▤ Practice</span><span class="relay-rm-time">◕ 2.5h</span></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mode 1: Sprint Blueprint -->
+            <div class="modes-screen" data-mode-screen="1">
+              <div class="app-screen modes-sprint-screen" id="mdSprintScreen">
+                <div class="app-topbar">
+                  <div class="app-brand">
+                    <div class="app-brand-sq app-brand-round">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="#1C1C1C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                    </div>
+                    <div class="app-brand-name">Sprint</div>
+                  </div>
+                  <div class="modes-sprint-days">14 days left</div>
+                </div>
+
+                <div class="modes-sprint-goal">
+                  <div class="modes-sprint-goal-label">GOAL</div>
+                  <div class="modes-sprint-goal-title">Ship a working portfolio site</div>
+                </div>
+
+                <div class="modes-sprint-track">
+                  <div class="modes-sprint-track-bar"><i id="mdSprintBar" style="width:36%"></i></div>
+                  <div class="modes-sprint-track-labels"><span>Day 5</span><span>Day 14</span></div>
+                </div>
+
+                <div class="app-label">TODAY</div>
+                <div class="modes-sprint-tasks" id="mdSprintTasks">
+                  <div class="modes-sprint-task done">
+                    <div class="relay-rm-check">✓</div>
+                    <span>Wireframe the homepage layout</span>
+                  </div>
+                  <div class="modes-sprint-task active">
+                    <div class="relay-rm-check"></div>
+                    <span>Build the responsive nav</span>
+                  </div>
+                  <div class="modes-sprint-task">
+                    <div class="relay-rm-check"></div>
+                    <span>Deploy a first working draft</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mode 2: YouTube-Based -->
+            <div class="modes-screen" data-mode-screen="2">
+              <div class="app-screen modes-yt-screen" id="mdYtScreen">
+                <div class="app-topbar">
+                  <div class="app-brand">
+                    <div class="app-brand-sq app-brand-round">
+                      <svg viewBox="0 0 24 24" fill="#1C1C1C" stroke="none"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                    <div class="app-brand-name">Your creators</div>
+                  </div>
+                </div>
+
+                <div class="app-label">BUILT AROUND</div>
+                <div class="modes-yt-creators" id="mdYtCreators">
+                  <div class="modes-yt-creator active">Fireship</div>
+                  <div class="modes-yt-creator">Web Dev Simplified</div>
+                  <div class="modes-yt-creator">+ 2 more</div>
+                </div>
+
+                <div class="app-label">UP NEXT</div>
+                <div class="modes-yt-list" id="mdYtList">
+                  <div class="modes-yt-row">
+                    <div class="modes-yt-thumb"><svg viewBox="0 0 24 24" fill="#1C1C1C" stroke="none"><path d="M8 5v14l11-7z"/></svg></div>
+                    <div style="flex:1">
+                      <div class="modes-yt-title">React in 100 Seconds</div>
+                      <div class="modes-yt-meta">Fireship &middot; 12:04</div>
+                    </div>
+                  </div>
+                  <div class="modes-yt-row">
+                    <div class="modes-yt-thumb"><svg viewBox="0 0 24 24" fill="#1C1C1C" stroke="none"><path d="M8 5v14l11-7z"/></svg></div>
+                    <div style="flex:1">
+                      <div class="modes-yt-title">Build a Real Project With Hooks</div>
+                      <div class="modes-yt-meta">Web Dev Simplified &middot; 24:41</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <div class="modes-copy-col">
+        <div class="modes-copy is-active" data-mode-copy="0">
+          <div class="modes-copy-box">
+            <div class="modes-copy-num">01</div>
+            <h3>Full Roadmap</h3>
+            <p>The complete, personalized curriculum — phases, steps, real resources, milestones, and a projected finish date. For when you want the whole path mapped out, not just the next thing to watch.</p>
+            <span class="modes-callout-label">What you get</span>
+            <p>Every phase breaks down into Watch / Read / Build / Practice steps, each pointing to a real, verified resource — no invented links. Pass a quick check to unlock the next one, and watch your finish date sharpen as you go.</p>
+          </div>
+        </div>
+        <div class="modes-copy" data-mode-copy="1">
+          <div class="modes-copy-box">
+            <div class="modes-copy-num">02</div>
+            <h3>Sprint Blueprint</h3>
+            <p>A focused 1&ndash;4 week plan built around one goal. No filler, no detours — just what it takes to ship the thing you're actually trying to build.</p>
+            <span class="modes-callout-label">What you get</span>
+            <p>A single outcome, broken into a day-by-day task list with a countdown to your deadline. Ideal for a portfolio piece, an interview prep push, or any skill you need fast.</p>
+          </div>
+        </div>
+        <div class="modes-copy" data-mode-copy="2">
+          <div class="modes-copy-box">
+            <div class="modes-copy-num">03</div>
+            <h3>YouTube-Based</h3>
+            <p>Built around creators you already trust. Navigator structures their videos into an actual path instead of leaving you to figure out the order yourself.</p>
+            <span class="modes-callout-label">What you get</span>
+            <p>Pick the channels you already learn from, and Navigator sequences their videos into phases and steps — same structure as a Full Roadmap, built entirely from creators you chose.</p>
+          </div>
+        </div>
+
+        <div class="modes-controls">
+          <button type="button" class="modes-arrow" id="modesPrev" aria-label="Previous mode">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <div class="modes-dots" id="modesDots">
+            <button type="button" class="modes-dot is-active" data-mode-dot="0" aria-label="Full Roadmap"></button>
+            <button type="button" class="modes-dot" data-mode-dot="1" aria-label="Sprint Blueprint"></button>
+            <button type="button" class="modes-dot" data-mode-dot="2" aria-label="YouTube-Based"></button>
+          </div>
+          <button type="button" class="modes-arrow" id="modesNext" aria-label="Next mode">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- Section 7: Navi, the AI tutor -->
+<section class="navi" id="navi">
+  <div class="navi-glow" aria-hidden="true"></div>
+  <div class="navi-grid">
+    <div class="navi-inner reveal">
+      <div class="navi-label">Meet Navi</div>
+      <h2>Stuck isn't a stopping<br><em>point &mdash; it's a question away.</em></h2>
+      <p class="navi-lead">
+        Navi is the AI tutor built into Navigator. It already knows what you're learning right now,
+        so answers land in context instead of a pile of generic search results.
+      </p>
+      <ul class="navi-rules">
+        <li>
+          <span class="rule-mark">1</span>
+          <span><strong>Ask by typing or voice.</strong> Get unstuck mid-step without breaking your flow to go dig through a forum.</span>
+        </li>
+        <li>
+          <span class="rule-mark">2</span>
+          <span><strong>Keep a conversation per topic.</strong> Navi tracks context across multiple threads, so you never have to re-explain where you are.</span>
+        </li>
+        <li>
+          <span class="rule-mark">3</span>
+          <span><strong>Save any answer to your notes.</strong> One tap sends it straight to the Notes Hub, tied to the topic it belongs to &mdash; nothing useful gets lost in a chat scrollback.</span>
+        </li>
+      </ul>
+      <p class="navi-foot">
+        It's the difference between googling it and having someone who already knows your roadmap explain it.
+      </p>
+    </div>
+
+    <div class="navi-phone-col reveal">
+      <div class="phone navi-phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="app-screen navi-chat-screen">
+            <div class="app-topbar">
+              <div class="app-brand">
+                <div class="app-brand-sq app-brand-round navi-avatar">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#1C1C1C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a5 5 0 015 5v2a5 5 0 01-10 0V8a5 5 0 015-5z"/><path d="M12 15v3m-4 3h8"/></svg>
+                </div>
+                <div class="app-brand-name">Navi</div>
+              </div>
+              <div class="navi-mic" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#1C1C1C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 003-3V6a3 3 0 00-6 0v6a3 3 0 003 3z"/><path d="M19 11a7 7 0 01-14 0M12 18v3"/></svg>
+              </div>
+            </div>
+
+            <div class="app-label">TIED TO &middot; TYPESCRIPT FOUNDATIONS</div>
+
+            <div class="navi-chat-thread" id="naviChatThread">
+              <div class="navi-bubble user">
+                <span>Why does this interface need <code>readonly</code> here?</span>
+              </div>
+              <div class="navi-bubble bot">
+                <span>Because the array gets passed into a step you shouldn't mutate later &mdash; <code>readonly</code> catches that at compile time instead of at runtime.</span>
+                <div class="navi-bubble-actions">
+                  <span class="navi-save-pill">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+                    Save to notes
+                  </span>
+                </div>
+              </div>
+              <div class="navi-bubble user">
+                <span>Got it &mdash; show me an example</span>
+              </div>
+            </div>
+
+            <div class="navi-input-row">
+              <span class="navi-input-ph">Ask Navi anything&hellip;</span>
+              <span class="navi-input-send">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#1C1C1C" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Section 8: Immersive Mode -->
+<section class="immersive" id="immersive">
+  <div class="immersive-glow" aria-hidden="true"></div>
+  <div class="immersive-grid">
+    <div class="immersive-phone-col reveal">
+      <div class="phone immersive-phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="app-screen immersive-screen">
+            <div class="immersive-video" id="immersiveVideo">
+              <div class="immersive-video-glow" aria-hidden="true"></div>
+              <div class="immersive-video-play">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+              <div class="immersive-video-scrub">
+                <div class="immersive-video-fill" id="immersiveFill"></div>
+                <div class="immersive-chapter-dot" style="left:18%"></div>
+                <div class="immersive-chapter-dot" style="left:46%"></div>
+                <div class="immersive-chapter-dot" style="left:74%"></div>
+              </div>
+              <div class="immersive-video-time">4:12 / 17:40</div>
+            </div>
+
+            <div class="app-label">CHAPTERS &middot; GENERATED FROM THIS VIDEO</div>
+
+            <div class="immersive-chapters" id="immersiveChapters">
+              <div class="immersive-chapter done">
+                <span class="immersive-chapter-mark">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                </span>
+                <span class="immersive-chapter-label">Setting up the environment</span>
+              </div>
+              <div class="immersive-chapter active">
+                <span class="immersive-chapter-mark immersive-chapter-num">2</span>
+                <span class="immersive-chapter-label">State &amp; props, explained</span>
+              </div>
+              <div class="immersive-chapter">
+                <span class="immersive-chapter-mark immersive-chapter-num">3</span>
+                <span class="immersive-chapter-label">Building the first component</span>
+              </div>
+            </div>
+
+            <div class="immersive-quiz-card" id="immersiveQuiz">
+              <div class="immersive-quiz-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+                Quick check
+              </div>
+              <p class="immersive-quiz-q">What triggers a re-render when state changes?</p>
+              <div class="immersive-quiz-opts">
+                <span class="immersive-quiz-opt correct">The component itself</span>
+                <span class="immersive-quiz-opt">The parent only</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="immersive-inner reveal">
+      <div class="immersive-label">Immersive Mode</div>
+      <h2>That YouTube video isn't<br><em>a video anymore &mdash; it's a lesson.</em></h2>
+      <p class="immersive-lead">
+        Paste any YouTube link and Navigator turns it into a guided, chaptered lesson &mdash;
+        the same structure as a roadmap step, built from a video you already wanted to watch.
+      </p>
+      <ul class="immersive-rules">
+        <li>
+          <span class="rule-mark">1</span>
+          <span><strong>AI-generated chapters.</strong> Long videos get broken into named sections, so you always know what part you're in and what's next.</span>
+        </li>
+        <li>
+          <span class="rule-mark">2</span>
+          <span><strong>Knowledge checks along the way.</strong> Short quizzes drop in at chapter boundaries &mdash; watching turns into proving you actually got it.</span>
+        </li>
+        <li>
+          <span class="rule-mark">3</span>
+          <span><strong>Capture notes as you watch.</strong> Jot a thought mid-video and it's saved to the right topic in your Notes Hub automatically &mdash; and it still counts toward XP.</span>
+        </li>
+      </ul>
+      <p class="immersive-foot">
+        No sign-up required to try it &mdash; paste a link and see your first chaptered lesson before you commit to anything.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- Section 11: Accountability & social -->
+<section class="social" id="social">
+  <div class="social-glow" aria-hidden="true"></div>
+  <div class="social-grid">
+    <div class="social-inner reveal">
+      <div class="social-label">Accountability &amp; Social</div>
+      <h2>Motivation runs out.<br><em>Accountability doesn't.</em></h2>
+      <p class="social-lead">
+        Add streak partners who see your daily plan, cheer the wins, and notice when you go
+        quiet &mdash; the same reason a gym buddy works better than a New Year's resolution.
+      </p>
+      <ul class="social-rules">
+        <li>
+          <span class="rule-mark">1</span>
+          <span><strong>Streak partners.</strong> Pair up with a friend and see each other's daily progress side by side &mdash; not just a number, the actual plan.</span>
+        </li>
+        <li>
+          <span class="rule-mark">2</span>
+          <span><strong>Reactions, not reports.</strong> A quick fire, clap, or nudge on a friend's step &mdash; lightweight enough to send every day.</span>
+        </li>
+        <li>
+          <span class="rule-mark">3</span>
+          <span><strong>Friend requests built in.</strong> Find people already learning what you're learning, or bring your own.</span>
+        </li>
+      </ul>
+      <p class="social-foot">
+        You can learn alone. You're just less likely to finish that way.
+      </p>
+    </div>
+
+    <div class="social-phone-col reveal">
+      <div class="phone social-phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="app-screen social-screen">
+            <div class="app-label">STREAK PARTNERS</div>
+            <div class="social-partners" id="socialPartners">
+              <div class="social-partner-row">
+                <span class="social-avatar" style="background:#E8C468">M</span>
+                <div class="social-partner-info">
+                  <b>Maya</b>
+                  <i>React &middot; Day 14 streak</i>
+                </div>
+                <span class="social-flame">&#128293;</span>
+              </div>
+              <div class="social-partner-row active">
+                <span class="social-avatar" style="background:#8FB8E8">J</span>
+                <div class="social-partner-info">
+                  <b>Jordan</b>
+                  <i>Data Structures &middot; Day 7 streak</i>
+                </div>
+                <span class="social-flame">&#128293;</span>
+              </div>
+              <div class="social-partner-row">
+                <span class="social-avatar" style="background:#C89AE8">S</span>
+                <div class="social-partner-info">
+                  <b>Sam</b>
+                  <i>UX Design &middot; Day 31 streak</i>
+                </div>
+                <span class="social-flame">&#128293;</span>
+              </div>
+            </div>
+
+            <div class="app-label" style="margin-top:1.4rem">TODAY</div>
+            <div class="social-reaction-card" id="socialReactionCard">
+              <div class="social-reaction-head">
+                <span class="social-avatar sm" style="background:#8FB8E8">J</span>
+                <span><b>Jordan</b> finished &ldquo;Binary Search Trees&rdquo;</span>
+              </div>
+              <div class="social-reaction-row">
+                <button type="button" class="social-react-btn" data-emoji="&#128293;">&#128293;</button>
+                <button type="button" class="social-react-btn" data-emoji="&#128079;">&#128079;</button>
+                <button type="button" class="social-react-btn" data-emoji="&#128170;">&#128170;</button>
+                <span class="social-react-sent" id="socialReactSent">Sent</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 12: Outcome / aspiration -->
+<section class="outcome" id="outcome">
+  <div class="outcome-inner reveal">
+    <div class="outcome-label">The Transformation</div>
+    <h2>From <span class="outcome-strike">scattered</span><br><em>to shipped.</em></h2>
+    <p class="outcome-lead">
+      Not another list of tutorials you'll bookmark and never open. A path you actually walk
+      &mdash; day by day, step by step, checkpoint by checkpoint &mdash; until the thing you
+      wanted to learn is a thing you know.
+    </p>
+    <div class="outcome-stats">
+      <div class="outcome-stat">
+        <b>3 min</b>
+        <span>from "I want to learn X" to a real plan</span>
+      </div>
+      <div class="outcome-stat">
+        <b>Real</b>
+        <span>videos, articles, tools &mdash; never invented</span>
+      </div>
+      <div class="outcome-stat">
+        <b>Finished</b>
+        <span>not just started</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Waitlist -->
+<section class="waitlist" id="waitlist">
+  <div class="waitlist-inner reveal">
+    <div class="waitlist-label">Coming Soon</div>
+    <h2>Be the first in<br><em>when we open the doors.</em></h2>
+    <p class="waitlist-lead">
+      Navigator is putting the finishing touches on. Join the waitlist and we'll let you know
+      the moment you can build your first roadmap.
+    </p>
+    <form class="waitlist-form" id="waitlistForm" novalidate>
+      <div class="waitlist-field">
+        <input type="email" id="waitlistEmail" name="email" placeholder="you@email.com" autocomplete="email" required />
+        <button type="submit" class="waitlist-submit" id="waitlistSubmit">
+          Join the waitlist
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+      <p class="waitlist-error" id="waitlistError">Enter a valid email address.</p>
+    </form>
+    <div class="waitlist-success" id="waitlistSuccess">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+      <span>You're on the list &mdash; we'll be in touch.</span>
+    </div>
+    <p class="waitlist-foot">No spam. One email when we launch, nothing else.</p>
+  </div>
+</section>
+
+
+<!-- CTA -->
+<section class="cta-section section-transition" data-transition="sweep">
+  <div class="cta-bg-text">Navigator</div>
+  <div class="cta-inner reveal">
+    <h2 class="cta-title">
+      Stop scrolling.<br>
+      <em>Start building.</em>
+    </h2>
+    <div class="cta-actions">
+      <a href="#" class="cta-btn-primary" id="buildRoadmapBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
+        Build my first roadmap
+      </a>
+      <a href="#how" class="cta-btn-secondary">See how it works</a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <a href="#" class="foot-logo">
+    <div class="logo-sq" style="width:22px;height:22px;border-radius:4px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#1C1C1C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="13" height="13">
+        <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/>
+      </svg>
+    </div>
+    <span>Navigator</span>
+  </a>
+  <div class="foot-right">
+    © 2026 Navigator · Part of Infinity
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13/dist/SplitText.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13/dist/MotionPathPlugin.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13/dist/ScrollTrigger.min.js"></script>
+<script src="navigator_v3.js"></script>
+</body>
+</html>

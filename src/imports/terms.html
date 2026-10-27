@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms and Conditions — Navigator</title>
+  <meta name="description" content="Terms and Conditions for Navigator — the structured, checkpoint-verified learning roadmap app." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --charcoal: #000000;
+      --lime: #C8F135;
+      --warm: #F0EDE6;
+      --mid: rgba(240,237,230,0.55);
+      --border: rgba(240,237,230,0.1);
+      --condensed: 'Barlow Condensed', sans-serif;
+      --body: 'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--charcoal);
+      color: var(--warm);
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    /* Nav */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 3rem;
+      height: 72px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0,0,0,0.94);
+      backdrop-filter: blur(12px);
+    }
+    .nav-logo {
+      font-family: var(--condensed);
+      font-weight: 800;
+      font-size: 30px;
+      letter-spacing: 0.5px;
+      color: var(--warm);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav-logo span { color: var(--lime); }
+    .logo-sq {
+      width: 30px; height: 30px;
+      background: var(--lime);
+      border-radius: 5px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .logo-sq svg { width: 16px; height: 16px; }
+    .logo-swoosh {
+      width: calc(0.82em * 484 / 373);
+      height: 0.82em;
+      display: inline-block;
+      transform: translateY(0.09em);
+    }
+    .logo-swoosh path { fill: currentColor; }
+    .nav-back {
+      font-size: 13px;
+      color: var(--mid);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.15s;
+    }
+    .nav-back:hover { color: var(--warm); }
+    .nav-back svg { width: 14px; height: 14px; }
+
+    /* Page */
+    .legal-page {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 124px 2rem 100px;
+    }
+
+    .legal-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--lime);
+      margin-bottom: 16px;
+    }
+
+    .legal-title {
+      font-family: var(--condensed);
+      font-weight: 900;
+      font-size: clamp(40px, 6vw, 72px);
+      line-height: 0.9;
+      letter-spacing: -1px;
+      text-transform: uppercase;
+      color: var(--warm);
+      margin-bottom: 12px;
+    }
+
+    .legal-date {
+      font-size: 13px;
+      color: var(--mid);
+      margin-bottom: 56px;
+    }
+
+    .legal-section {
+      margin-bottom: 48px;
+    }
+
+    .legal-section h2 {
+      font-family: var(--condensed);
+      font-weight: 800;
+      font-size: clamp(22px, 3vw, 28px);
+      letter-spacing: 0.2px;
+      text-transform: uppercase;
+      color: var(--warm);
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .legal-section p {
+      font-size: 15px;
+      color: rgba(240,237,230,0.78);
+      margin-bottom: 14px;
+    }
+
+    .legal-section ul {
+      list-style: none;
+      margin-bottom: 14px;
+    }
+
+    .legal-section ul li {
+      font-size: 15px;
+      color: rgba(240,237,230,0.78);
+      padding: 6px 0 6px 20px;
+      position: relative;
+      border-bottom: 1px solid rgba(240,237,230,0.05);
+    }
+
+    .legal-section ul li:last-child { border-bottom: none; }
+
+    .legal-section ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 5px;
+      height: 5px;
+      background: var(--lime);
+      border-radius: 50%;
+    }
+
+    .legal-section a {
+      color: var(--lime);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(200,241,53,0.3);
+      transition: border-color 0.15s;
+    }
+
+    .legal-section a:hover { border-color: var(--lime); }
+
+    .legal-highlight {
+      background: rgba(200,241,53,0.06);
+      border: 1px solid rgba(200,241,53,0.15);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 14px;
+    }
+
+    .legal-highlight p {
+      color: rgba(240,237,230,0.9);
+      margin: 0;
+    }
+
+    /* Divider */
+    .legal-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 48px 0;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--mid);
+    }
+
+    footer a {
+      color: var(--mid);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    footer a:hover { color: var(--warm); }
+
+    .foot-logo {
+      display: flex; align-items: center; gap: 8px;
+      font-family: var(--condensed);
+      font-weight: 800;
+      font-size: 20px;
+      color: var(--warm);
+      text-decoration: none;
+    }
+
+    .foot-right { display: flex; align-items: center; gap: 20px; }
+
+    @media (max-width: 640px) {
+      nav { padding: 0 1.25rem; }
+      .legal-page { padding: 104px 1.25rem 80px; }
+      footer { padding: 24px 1.25rem; flex-direction: column; gap: 16px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="navigator_v3-2.html" class="nav-logo">
+    <span>n<svg class="logo-swoosh" viewBox="0 0 484 373" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M 481 94 L 406 1 L 339 96 L 342 110 L 355 113 L 388 80 L 398 148 L 398 191 L 390 237 L 377 267 L 357 291 L 326 309 L 306 311 L 284 299 L 255 263 L 176 113 L 135 53 L 98 26 L 77 24 L 59 30 L 25 65 L 11 99 L 2 144 L 4 252 L 27 335 L 52 363 L 78 370 L 100 369 L 150 350 L 203 309 L 241 347 L 284 368 L 331 371 L 378 356 L 418 323 L 443 271 L 446 202 L 437 80 L 463 112 L 479 111 Z M 96 116 L 102 116 L 105 118 L 115 132 L 127 158 L 129 165 L 132 170 L 136 182 L 139 187 L 141 194 L 154 222 L 154 224 L 167 251 L 177 268 L 177 270 L 174 274 L 157 290 L 138 301 L 123 305 L 108 305 L 94 301 L 89 296 L 84 286 L 80 271 L 79 261 L 78 260 L 77 245 L 76 244 L 76 232 L 75 231 L 75 182 L 76 181 L 76 170 L 77 169 L 78 155 L 79 154 L 79 150 L 83 134 L 89 122 Z"/></svg>igator</span>
+  </a>
+  <a href="navigator_v3-2.html" class="nav-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Back to home
+  </a>
+</nav>
+
+<main class="legal-page">
+
+  <div class="legal-label">Legal</div>
+  <h1 class="legal-title">Terms &amp;<br>Conditions</h1>
+  <p class="legal-date">Last updated: October 13, 2026</p>
+
+  <div class="legal-highlight">
+    <p>Please read these Terms and Conditions carefully before using Navigator. By accessing or using our service, you agree to be bound by these terms. If you do not agree, do not use the service.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>1. Who We Are</h2>
+    <p>Navigator is a product of Infinity ("we," "us," or "our"). Navigator provides an AI-powered, personalized learning roadmap platform that helps individuals structure, track, and complete skill development goals.</p>
+    <p>These Terms and Conditions ("Terms") govern your use of the Navigator web application, marketing site, and any associated services (collectively, the "Service"). By creating an account or using any part of the Service, you enter into a binding agreement with Infinity.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>2. Eligibility</h2>
+    <p>You must be at least 13 years of age to use Navigator. If you are under 18, you confirm that a parent or legal guardian has reviewed and agreed to these Terms on your behalf. We do not knowingly collect personal information from children under 13. If we become aware that a child under 13 has provided personal information without parental consent, we will take steps to remove that information.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>3. Your Account</h2>
+    <p>To access certain features of Navigator, you may be required to create an account. You agree to:</p>
+    <ul>
+      <li>Provide accurate, current, and complete registration information</li>
+      <li>Maintain the security of your password and not share it with others</li>
+      <li>Notify us immediately of any unauthorised use of your account</li>
+      <li>Accept responsibility for all activities that occur under your account</li>
+    </ul>
+    <p>We reserve the right to suspend or terminate accounts that violate these Terms or that we believe pose a risk to the Service or other users.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>4. Use of the Service</h2>
+    <p>You agree to use Navigator only for lawful purposes and in a manner consistent with these Terms. You must not:</p>
+    <ul>
+      <li>Use the Service to transmit spam, malware, or any harmful content</li>
+      <li>Attempt to gain unauthorised access to any part of the Service or its infrastructure</li>
+      <li>Reverse engineer, decompile, or disassemble any part of the Service</li>
+      <li>Use automated tools (bots, scrapers, crawlers) to extract data from the Service</li>
+      <li>Impersonate another person or entity, or misrepresent your affiliation with any person or entity</li>
+      <li>Use the Service in any way that could damage, disable, overburden, or impair our servers or networks</li>
+      <li>Circumvent, disable, or otherwise interfere with security-related features of the Service</li>
+    </ul>
+    <p>We reserve the right to investigate and take appropriate action against anyone who, in our sole discretion, violates this provision.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>5. AI-Generated Content</h2>
+    <p>Navigator uses artificial intelligence to generate personalised learning roadmaps, resource recommendations, quiz questions, and related content. You acknowledge that:</p>
+    <ul>
+      <li>AI-generated content may not always be accurate, complete, or up to date</li>
+      <li>We make reasonable efforts to verify resource links, but we cannot guarantee the availability or accuracy of third-party resources</li>
+      <li>Roadmaps and recommendations are guidance tools, not professional educational or career advice</li>
+      <li>You are responsible for independently verifying any information that is material to a decision</li>
+    </ul>
+    <p>We implement verification steps to reduce hallucinated or broken links, but no automated system is perfect. If you encounter an incorrect or broken resource, please report it to us.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>6. Intellectual Property</h2>
+    <p>All content, design, code, trademarks, and materials made available through Navigator — including but not limited to the Navigator wordmark, UI design, and roadmap generation system — are the intellectual property of Infinity or its licensors and are protected by applicable intellectual property laws.</p>
+    <p>You are granted a limited, non-exclusive, non-transferable, revocable licence to use the Service for your personal, non-commercial learning purposes. This licence does not include the right to:</p>
+    <ul>
+      <li>Reproduce, distribute, or publicly display our proprietary content</li>
+      <li>Create derivative works based on our Service or its output for commercial use</li>
+      <li>Remove any proprietary notices or labels on the Service</li>
+    </ul>
+    <p>Your own learning notes, annotations, and personal data that you input into Navigator remain yours. We claim no ownership over content you create.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>7. Third-Party Links and Resources</h2>
+    <p>Navigator may include links to third-party websites, videos, courses, articles, and other resources. These links are provided for your convenience and information. We do not control, endorse, or assume responsibility for any third-party content, and accessing those resources is at your own risk.</p>
+    <p>Third-party sites are governed by their own terms and privacy policies. We encourage you to review them before interacting with those platforms.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>8. Subscriptions and Payments</h2>
+    <p>Navigator may offer free and paid tiers of service. If you subscribe to a paid plan:</p>
+    <ul>
+      <li>You authorise us to charge the payment method on file for all applicable fees</li>
+      <li>Subscriptions automatically renew at the end of each billing period unless cancelled beforehand</li>
+      <li>You may cancel at any time; cancellations take effect at the end of the current billing period</li>
+      <li>Refunds are handled on a case-by-case basis — contact us at <a href="mailto:support@navigatorapp.co">support@navigatorapp.co</a> within 14 days of a charge if you believe one was made in error</li>
+    </ul>
+    <p>All prices are stated in the applicable currency and are inclusive of any applicable taxes where required by law.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>9. Disclaimers and Limitation of Liability</h2>
+    <p>The Service is provided "as is" and "as available" without warranties of any kind, either express or implied. To the fullest extent permitted by law, Infinity disclaims all warranties, including but not limited to implied warranties of merchantability, fitness for a particular purpose, and non-infringement.</p>
+    <p>In no event shall Infinity, its directors, employees, partners, or licensors be liable for any indirect, incidental, special, consequential, or punitive damages — including loss of profits, data, goodwill, or other intangible losses — arising out of or in connection with your use of the Service, even if advised of the possibility of such damages.</p>
+    <p>Our aggregate liability to you for any claim arising out of or relating to the Service shall not exceed the greater of (a) the amount you paid us in the 12 months preceding the claim, or (b) £50 GBP.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>10. Indemnification</h2>
+    <p>You agree to defend, indemnify, and hold harmless Infinity and its officers, directors, employees, and agents from and against any claims, damages, obligations, losses, liabilities, costs, and expenses (including reasonable attorneys' fees) arising from:</p>
+    <ul>
+      <li>Your use of or access to the Service</li>
+      <li>Your violation of these Terms</li>
+      <li>Your violation of any third-party rights</li>
+      <li>Any content you submit, post, or transmit through the Service</li>
+    </ul>
+  </div>
+
+  <div class="legal-section">
+    <h2>11. Termination</h2>
+    <p>We may suspend or terminate your access to the Service at any time, with or without notice, for conduct that we believe violates these Terms or is harmful to other users, us, third parties, or the integrity of the Service.</p>
+    <p>You may also delete your account at any time through your account settings. Upon termination, your right to use the Service ceases immediately. Sections of these Terms that by their nature should survive termination will remain in effect.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>12. Governing Law and Disputes</h2>
+    <p>These Terms are governed by and construed in accordance with the laws of England and Wales, without regard to its conflict of law provisions.</p>
+    <p>Any disputes arising out of or relating to these Terms or the Service that cannot be resolved informally shall be submitted to the exclusive jurisdiction of the courts of England and Wales.</p>
+    <p>Before initiating formal proceedings, we encourage you to contact us at <a href="mailto:legal@navigatorapp.co">legal@navigatorapp.co</a> so we can attempt to resolve the matter informally.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>13. Changes to These Terms</h2>
+    <p>We may update these Terms from time to time to reflect changes in our Service, legal requirements, or business practices. When we make material changes, we will notify you by email (if you have an account) and by updating the "Last updated" date at the top of this page.</p>
+    <p>Your continued use of the Service after changes become effective constitutes your acceptance of the revised Terms. If you do not agree to the updated Terms, you should stop using the Service and delete your account.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>14. Contact Us</h2>
+    <p>If you have any questions about these Terms and Conditions, please contact us:</p>
+    <ul>
+      <li>Email: <a href="mailto:legal@navigatorapp.co">legal@navigatorapp.co</a></li>
+      <li>Support: <a href="mailto:support@navigatorapp.co">support@navigatorapp.co</a></li>
+    </ul>
+    <p>Navigator is a product of Infinity. All legal correspondence should be addressed to Infinity.</p>
+  </div>
+
+</main>
+
+<footer>
+  <a href="navigator_v3-2.html" class="foot-logo">
+    <div class="logo-sq">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#1C1C1C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/>
+      </svg>
+    </div>
+    Navigator
+  </a>
+  <div class="foot-right">
+    <span>© 2026 Navigator · Part of Infinity</span>
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+  </div>
+</footer>
+
+</body>
+</html>

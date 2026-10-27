@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — Navigator</title>
+  <meta name="description" content="Privacy Policy for Navigator — how we collect, use, and protect your personal information." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --charcoal: #000000;
+      --lime: #C8F135;
+      --warm: #F0EDE6;
+      --mid: rgba(240,237,230,0.55);
+      --border: rgba(240,237,230,0.1);
+      --condensed: 'Barlow Condensed', sans-serif;
+      --body: 'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--charcoal);
+      color: var(--warm);
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    /* Nav */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 3rem;
+      height: 72px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0,0,0,0.94);
+      backdrop-filter: blur(12px);
+    }
+    .nav-logo {
+      font-family: var(--condensed);
+      font-weight: 800;
+      font-size: 30px;
+      letter-spacing: 0.5px;
+      color: var(--warm);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav-logo span { color: var(--lime); }
+    .logo-sq {
+      width: 30px; height: 30px;
+      background: var(--lime);
+      border-radius: 5px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .logo-sq svg { width: 16px; height: 16px; }
+    .logo-swoosh {
+      width: calc(0.82em * 484 / 373);
+      height: 0.82em;
+      display: inline-block;
+      transform: translateY(0.09em);
+    }
+    .logo-swoosh path { fill: currentColor; }
+    .nav-back {
+      font-size: 13px;
+      color: var(--mid);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.15s;
+    }
+    .nav-back:hover { color: var(--warm); }
+    .nav-back svg { width: 14px; height: 14px; }
+
+    /* Page */
+    .legal-page {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 124px 2rem 100px;
+    }
+
+    .legal-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--lime);
+      margin-bottom: 16px;
+    }
+
+    .legal-title {
+      font-family: var(--condensed);
+      font-weight: 900;
+      font-size: clamp(40px, 6vw, 72px);
+      line-height: 0.9;
+      letter-spacing: -1px;
+      text-transform: uppercase;
+      color: var(--warm);
+      margin-bottom: 12px;
+    }
+
+    .legal-date {
+      font-size: 13px;
+      color: var(--mid);
+      margin-bottom: 56px;
+    }
+
+    .legal-section {
+      margin-bottom: 48px;
+    }
+
+    .legal-section h2 {
+      font-family: var(--condensed);
+      font-weight: 800;
+      font-size: clamp(22px, 3vw, 28px);
+      letter-spacing: 0.2px;
+      text-transform: uppercase;
+      color: var(--warm);
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .legal-section p {
+      font-size: 15px;
+      color: rgba(240,237,230,0.78);
+      margin-bottom: 14px;
+    }
+
+    .legal-section ul {
+      list-style: none;
+      margin-bottom: 14px;
+    }
+
+    .legal-section ul li {
+      font-size: 15px;
+      color: rgba(240,237,230,0.78);
+      padding: 6px 0 6px 20px;
+      position: relative;
+      border-bottom: 1px solid rgba(240,237,230,0.05);
+    }
+
+    .legal-section ul li:last-child { border-bottom: none; }
+
+    .legal-section ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 5px;
+      height: 5px;
+      background: var(--lime);
+      border-radius: 50%;
+    }
+
+    .legal-section a {
+      color: var(--lime);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(200,241,53,0.3);
+      transition: border-color 0.15s;
+    }
+
+    .legal-section a:hover { border-color: var(--lime); }
+
+    .legal-highlight {
+      background: rgba(200,241,53,0.06);
+      border: 1px solid rgba(200,241,53,0.15);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 14px;
+    }
+
+    .legal-highlight p {
+      color: rgba(240,237,230,0.9);
+      margin: 0;
+    }
+
+    /* Data table */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 14px;
+      font-size: 14px;
+    }
+
+    .data-table th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--lime);
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(200,241,53,0.2);
+    }
+
+    .data-table td {
+      padding: 10px 14px;
+      color: rgba(240,237,230,0.75);
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    .data-table tr:last-child td { border-bottom: none; }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--mid);
+    }
+
+    footer a {
+      color: var(--mid);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    footer a:hover { color: var(--warm); }
+
+    .foot-logo {
+      display: flex; align-items: center; gap: 8px;
+      font-family: var(--condensed);
+      font-weight: 800;
+      font-size: 20px;
+      color: var(--warm);
+      text-decoration: none;
+    }
+
+    .foot-right { display: flex; align-items: center; gap: 20px; }
+
+    @media (max-width: 640px) {
+      nav { padding: 0 1.25rem; }
+      .legal-page { padding: 104px 1.25rem 80px; }
+      footer { padding: 24px 1.25rem; flex-direction: column; gap: 16px; text-align: center; }
+      .data-table { font-size: 12px; }
+      .data-table th, .data-table td { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="navigator_v3-2.html" class="nav-logo">
+    <span>n<svg class="logo-swoosh" viewBox="0 0 484 373" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M 481 94 L 406 1 L 339 96 L 342 110 L 355 113 L 388 80 L 398 148 L 398 191 L 390 237 L 377 267 L 357 291 L 326 309 L 306 311 L 284 299 L 255 263 L 176 113 L 135 53 L 98 26 L 77 24 L 59 30 L 25 65 L 11 99 L 2 144 L 4 252 L 27 335 L 52 363 L 78 370 L 100 369 L 150 350 L 203 309 L 241 347 L 284 368 L 331 371 L 378 356 L 418 323 L 443 271 L 446 202 L 437 80 L 463 112 L 479 111 Z M 96 116 L 102 116 L 105 118 L 115 132 L 127 158 L 129 165 L 132 170 L 136 182 L 139 187 L 141 194 L 154 222 L 154 224 L 167 251 L 177 268 L 177 270 L 174 274 L 157 290 L 138 301 L 123 305 L 108 305 L 94 301 L 89 296 L 84 286 L 80 271 L 79 261 L 78 260 L 77 245 L 76 244 L 76 232 L 75 231 L 75 182 L 76 181 L 76 170 L 77 169 L 78 155 L 79 154 L 79 150 L 83 134 L 89 122 Z"/></svg>igator</span>
+  </a>
+  <a href="navigator_v3-2.html" class="nav-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Back to home
+  </a>
+</nav>
+
+<main class="legal-page">
+
+  <div class="legal-label">Legal</div>
+  <h1 class="legal-title">Privacy<br>Policy</h1>
+  <p class="legal-date">Last updated: October 13, 2026</p>
+
+  <div class="legal-highlight">
+    <p>Your privacy matters to us. This policy explains exactly what information we collect, why we collect it, and how you can control it. We do not sell your personal data to third parties — ever.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>1. Who We Are</h2>
+    <p>Navigator is a product of Infinity ("we," "us," or "our"). We are the data controller for the personal information collected through Navigator. If you have any questions about this Privacy Policy or our data practices, you can reach us at <a href="mailto:privacy@navigatorapp.co">privacy@navigatorapp.co</a>.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>2. Information We Collect</h2>
+    <p>We collect information in three ways: information you provide directly, information generated by your use of the Service, and information from third-party services.</p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Examples</th>
+          <th>How we get it</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Account data</strong></td>
+          <td>Name, email address, password hash, profile photo</td>
+          <td>You provide it when signing up or updating your profile</td>
+        </tr>
+        <tr>
+          <td><strong>Learning data</strong></td>
+          <td>Skill goals, level selection, roadmap content, step completions, quiz responses, streak data, XP</td>
+          <td>Generated as you use Navigator</td>
+        </tr>
+        <tr>
+          <td><strong>Usage data</strong></td>
+          <td>Pages visited, features used, session duration, button clicks, errors encountered</td>
+          <td>Collected automatically via our analytics tools</td>
+        </tr>
+        <tr>
+          <td><strong>Device data</strong></td>
+          <td>IP address, browser type, operating system, device identifiers, time zone</td>
+          <td>Collected automatically when you access the Service</td>
+        </tr>
+        <tr>
+          <td><strong>Communications</strong></td>
+          <td>Emails you send us, support tickets, waitlist sign-ups, feedback</td>
+          <td>You provide it when contacting us</td>
+        </tr>
+        <tr>
+          <td><strong>Payment data</strong></td>
+          <td>Billing name, last 4 digits, card expiry (full card details held by our payment processor, not us)</td>
+          <td>Provided when you subscribe to a paid plan</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>We do not collect sensitive personal data such as racial or ethnic origin, political opinions, religious beliefs, biometric data, or health information.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>3. How We Use Your Information</h2>
+    <p>We use your information for the following purposes:</p>
+    <ul>
+      <li><strong>Providing the Service</strong> — generating your roadmap, tracking your progress, sending streak reminders and XP updates</li>
+      <li><strong>Personalisation</strong> — tailoring AI-generated content to your skill level, learning style, and goals</li>
+      <li><strong>Account management</strong> — creating and maintaining your account, processing subscription payments, sending receipts</li>
+      <li><strong>Safety and security</strong> — detecting fraud, abuse, and security threats; enforcing our Terms of Service</li>
+      <li><strong>Product improvement</strong> — understanding how the Service is used so we can fix bugs and build better features</li>
+      <li><strong>Communications</strong> — responding to your support requests; sending product updates and important notices (you can opt out of marketing emails at any time)</li>
+      <li><strong>Legal compliance</strong> — meeting our obligations under applicable laws</li>
+    </ul>
+    <p>We process your data on the following legal bases under applicable data protection law: (a) performance of a contract, (b) your consent where explicitly given, (c) our legitimate interests in operating and improving the Service, and (d) compliance with legal obligations.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>4. AI and Your Learning Data</h2>
+    <p>Navigator uses large language models (LLMs) to generate personalised roadmaps and quiz questions. When you request a roadmap, the following information is sent to our AI infrastructure:</p>
+    <ul>
+      <li>The skill or subject you want to learn</li>
+      <li>Your self-reported experience level</li>
+      <li>Your selected learning mode (Full Roadmap, Sprint, YouTube-Based)</li>
+      <li>Your available time per day and target timeframe</li>
+    </ul>
+    <p>We do not send your name, email address, or any other identifying information to AI providers when generating roadmaps. AI-generated content is cached on our servers and associated with your account to power your experience.</p>
+    <p>We do not use your learning data to train third-party AI models. Our AI providers are contractually prohibited from using data we send them for model training purposes.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>5. How We Share Your Information</h2>
+    <p>We do not sell your personal data. We share information only in these limited circumstances:</p>
+    <ul>
+      <li><strong>Service providers</strong> — companies that help us operate Navigator (hosting, analytics, payment processing, email delivery, AI inference). These providers access only the data needed to perform their specific function and are bound by data processing agreements.</li>
+      <li><strong>Streak partners</strong> — if you add a streak partner, limited progress information (streak count, daily activity status) is shared with that person. You control who you add.</li>
+      <li><strong>Legal requirements</strong> — if required by law, court order, or government authority, we may disclose your information. We will notify you of such requests where legally permitted to do so.</li>
+      <li><strong>Business transfers</strong> — if Navigator is acquired by or merged with another company, your information may be transferred as part of that transaction. We will notify you before that happens and explain your options.</li>
+    </ul>
+  </div>
+
+  <div class="legal-section">
+    <h2>6. Cookies and Tracking</h2>
+    <p>We use cookies and similar tracking technologies to keep you logged in, remember your preferences, and understand how the Service is used. The types of cookies we use:</p>
+    <ul>
+      <li><strong>Strictly necessary</strong> — required for the Service to function (authentication tokens, session state). Cannot be disabled.</li>
+      <li><strong>Analytics</strong> — help us understand usage patterns and identify areas to improve. You can opt out via our cookie settings.</li>
+      <li><strong>Preferences</strong> — remember your settings, such as dark mode and notification preferences.</li>
+    </ul>
+    <p>We do not use advertising or cross-site tracking cookies. You can manage cookie preferences at any time through your browser settings or our cookie banner.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>7. Data Retention</h2>
+    <p>We keep your personal information for as long as your account is active or as needed to provide the Service. Specifically:</p>
+    <ul>
+      <li>Account data is retained until you delete your account</li>
+      <li>Learning data (roadmaps, progress, notes) is retained until you delete it or your account</li>
+      <li>Usage and analytics data is retained for up to 24 months</li>
+      <li>Payment records are retained for 7 years to meet financial reporting obligations</li>
+      <li>Support communications are retained for 3 years</li>
+    </ul>
+    <p>After account deletion, we may retain anonymised, aggregated data that cannot identify you for product analytics purposes.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>8. Your Rights</h2>
+    <p>Depending on your location, you may have the following rights regarding your personal data:</p>
+    <ul>
+      <li><strong>Access</strong> — request a copy of the personal data we hold about you</li>
+      <li><strong>Correction</strong> — ask us to correct inaccurate or incomplete information</li>
+      <li><strong>Deletion</strong> — request that we delete your personal data ("right to be forgotten")</li>
+      <li><strong>Portability</strong> — receive your data in a structured, machine-readable format</li>
+      <li><strong>Restriction</strong> — ask us to restrict processing of your data in certain circumstances</li>
+      <li><strong>Objection</strong> — object to processing based on our legitimate interests</li>
+      <li><strong>Withdraw consent</strong> — where processing is based on your consent, you can withdraw it at any time without affecting the lawfulness of prior processing</li>
+    </ul>
+    <p>To exercise any of these rights, email us at <a href="mailto:privacy@navigatorapp.co">privacy@navigatorapp.co</a>. We will respond within 30 days. We may ask you to verify your identity before processing your request.</p>
+    <p>If you are not satisfied with our response, you have the right to lodge a complaint with your local data protection authority. In the UK, this is the Information Commissioner's Office (ICO) at <a href="https://ico.org.uk" target="_blank" rel="noopener noreferrer">ico.org.uk</a>.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>9. Data Security</h2>
+    <p>We implement appropriate technical and organisational measures to protect your personal data against unauthorised access, alteration, disclosure, or destruction. These include:</p>
+    <ul>
+      <li>Encryption in transit (TLS/HTTPS) and at rest for sensitive data</li>
+      <li>Access controls limiting which employees can access personal data</li>
+      <li>Regular security reviews and penetration testing</li>
+      <li>Monitoring systems for unusual access patterns</li>
+    </ul>
+    <p>No method of transmission over the Internet is 100% secure. While we strive to protect your data, we cannot guarantee its absolute security. In the event of a data breach that affects your rights or freedoms, we will notify you and relevant authorities as required by law.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>10. International Data Transfers</h2>
+    <p>Navigator operates globally and your data may be processed in countries other than the one where you live. Where we transfer personal data outside the UK or European Economic Area (EEA), we ensure that appropriate safeguards are in place — such as Standard Contractual Clauses approved by the European Commission — to protect your information to the same standard as in your home country.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>11. Children's Privacy</h2>
+    <p>Navigator is not directed at children under the age of 13. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe your child has provided us with personal information, please contact us immediately at <a href="mailto:privacy@navigatorapp.co">privacy@navigatorapp.co</a> and we will take steps to delete that information.</p>
+    <p>Users aged 13–17 may use Navigator with parental consent. We recommend that parents review this Privacy Policy with their teens before account creation.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>12. Third-Party Services</h2>
+    <p>Navigator integrates with or links to the following categories of third-party services, each governed by their own privacy policies:</p>
+    <ul>
+      <li><strong>Authentication</strong> — if you sign in via Google or another provider, their privacy policy governs the data they share with us</li>
+      <li><strong>Payment processing</strong> — we use a PCI-DSS compliant payment processor; we never store your full card details</li>
+      <li><strong>External resources</strong> — YouTube videos, articles, and tools linked in your roadmap are hosted by third parties and governed by their policies</li>
+    </ul>
+    <p>We are not responsible for the privacy practices of third-party services. We encourage you to review their policies before using them.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>13. Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time. When we do, we will revise the "Last updated" date at the top of this page. For material changes, we will notify you by email (where you have an account) or by a prominent notice within the Service before the change takes effect.</p>
+    <p>Your continued use of Navigator after a change becomes effective constitutes your acceptance of the updated policy. If you do not agree to the changes, please stop using the Service and delete your account.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>14. Contact &amp; Data Protection</h2>
+    <p>For privacy-related questions, requests, or concerns, please contact:</p>
+    <ul>
+      <li>Email: <a href="mailto:privacy@navigatorapp.co">privacy@navigatorapp.co</a></li>
+      <li>General support: <a href="mailto:support@navigatorapp.co">support@navigatorapp.co</a></li>
+    </ul>
+    <p>Navigator is a product of Infinity. We aim to respond to all privacy requests within 30 days. For urgent data security concerns, please mark your message as "Urgent — Data Security."</p>
+  </div>
+
+</main>
+
+<footer>
+  <a href="navigator_v3-2.html" class="foot-logo">
+    <div class="logo-sq">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#1C1C1C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/>
+      </svg>
+    </div>
+    Navigator
+  </a>
+  <div class="foot-right">
+    <span>© 2026 Navigator · Part of Infinity</span>
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+  </div>
+</footer>
+
+</body>
+</html>
