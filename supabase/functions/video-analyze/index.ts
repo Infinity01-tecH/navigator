@@ -298,10 +298,32 @@ function fullTranscriptText(segments: TranscriptSegment[], capChars = 16000): st
   return full.length > capChars ? full.slice(0, capChars) + "\n...(truncated)" : full;
 }
 
+// Groups the raw caption pieces (usually 2-5 words each) into ~20s readable blocks for the
+// Transcript tab. Keeps the response small on long videos — a 2h video is ~360 blocks.
+interface TranscriptLine { start: number; text: string }
+function groupTranscript(segments: TranscriptSegment[], windowSecs = 20): TranscriptLine[] {
+  const out: TranscriptLine[] = [];
+  let curStart = -1;
+  let parts: string[] = [];
+  const flush = () => {
+    const text = parts.join(" ").replace(/\s+/g, " ").trim();
+    if (text) out.push({ start: Math.max(0, Math.round(curStart)), text });
+    parts = [];
+  };
+  for (const s of segments) {
+    if (typeof s?.text !== "string" || typeof s?.start !== "number") continue;
+    if (curStart < 0) curStart = s.start;
+    else if (s.start - curStart >= windowSecs) { flush(); curStart = s.start; }
+    parts.push(s.text);
+  }
+  if (parts.length) flush();
+  return out;
+}
+
 // ── Types matching Watch.tsx's contract exactly ──────────────────────────────────
 interface VideoQuiz { question: string; options: string[]; answer: string; explanation: string }
 interface VideoChapter { id: string; index: number; title: string; startTime: number; endTime: number; quiz: VideoQuiz | null }
-interface VideoAnalysis { videoId: string; title: string; thumbnail: string; durationSecs: number; chapters: VideoChapter[] }
+interface VideoAnalysis { videoId: string; title: string; thumbnail: string; durationSecs: number; chapters: VideoChapter[]; transcript: TranscriptLine[] }
 
 function parseAIJson(raw: string): any {
   const cleaned = raw.trim().replace(/^```json\s*/i, "").replace(/```\s*$/, "").trim();
@@ -549,7 +571,10 @@ serve(async (req) => {
       chapters[0].startTime = 0; // guard against a gap before the first chapter
     }
 
-    const analysis: VideoAnalysis = { videoId, title, thumbnail, durationSecs, chapters };
+    const analysis: VideoAnalysis = {
+      videoId, title, thumbnail, durationSecs, chapters,
+      transcript: segments ? groupTranscript(segments) : [], // [] = no captions for this video
+    };
     return json(analysis);
 
   } catch (e) {

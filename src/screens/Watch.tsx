@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 import { useSmoothScroll } from '../lib/useSmoothScroll';
-import { Play, Pause, ChevronLeft, ChevronRight, Bookmark, Brain, Check, Lock, RotateCcw, RotateCw, Maximize, Minimize, Settings, ArrowLeft } from 'lucide-react';
+import { Play, Pause, ChevronLeft, ChevronRight, Bookmark, Brain, Check, Lock, RotateCcw, RotateCw, Maximize, Minimize, Settings, ArrowLeft, Copy } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { NAV_LOGO_PATH, NAV_LOGO_VIEWBOX } from '../lib/navLogo';
 import { useApp } from '../lib/context';
@@ -80,6 +80,9 @@ interface VideoAnalysis {
   thumbnail: string;
   durationSecs: number;
   chapters: VideoChapter[];
+  // Timestamped caption blocks (~20s each) from video-analyze. [] when the
+  // video has no captions, or when an older deployed function omits it.
+  transcript: { start: number; text: string }[];
 }
 interface CaptureItem {
   id: string;
@@ -183,6 +186,9 @@ function normalizeAnalysis(raw: any): VideoAnalysis {
     thumbnail: raw.thumbnail,
     durationSecs: raw.durationSecs,
     chapters,
+    transcript: Array.isArray(raw.transcript)
+      ? raw.transcript.filter((l: any) => l && typeof l.text === 'string' && typeof l.start === 'number')
+      : [],
   };
 }
 
@@ -587,7 +593,9 @@ function ImmersivePlayer({ analysis }: { analysis: VideoAnalysis }) {
   // ("if they have answered the quiz already, they don't have to answer
   // another") and so the lock/unlock boundary below can be derived from it.
   const [resolvedChapters, setResolvedChapters] = useState<Record<string, ChapterResolution>>({});
-  const [workspace,     setWorkspace]     = useState<'roadmap' | 'captures'>('roadmap');
+  const [workspace,     setWorkspace]     = useState<'roadmap' | 'captures' | 'transcript'>('roadmap');
+  const [copied,        setCopied]        = useState(false);
+  const activeLineRef = useRef<HTMLButtonElement>(null);
   const [captures,      setCaptures]      = useState<CaptureItem[]>(() => loadVideoCaptures(analysis.videoId));
   // Persist captures to localStorage whenever they change so they survive
   // navigation away and tab reloads. Saved under the video's own ID.
@@ -888,6 +896,43 @@ function ImmersivePlayer({ analysis }: { analysis: VideoAnalysis }) {
     if (!ch) return;
     playerRef.current?.seekTo(ch.startTime, true);
     setActiveChapter(allowed);
+  }
+
+  // ── Transcript tab ──
+  // Same quiz gate as the chapter list: lines at/after the end of the first
+  // unresolved-quiz chapter stay locked, so the transcript can't be used to
+  // skip past a quiz. Everything at or before that chapter is reachable.
+  const transcriptLimit = firstLockedIndex < analysis.chapters.length
+    ? analysis.chapters[firstLockedIndex].endTime
+    : Infinity;
+
+  const activeLineIdx = useMemo(() => {
+    let idx = -1;
+    for (let i = 0; i < analysis.transcript.length; i++) {
+      if (analysis.transcript[i].start <= currentTime) idx = i; else break;
+    }
+    return idx;
+  }, [analysis.transcript, currentTime]);
+
+  useEffect(() => {
+    if (workspace === 'transcript') activeLineRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }, [activeLineIdx, workspace]);
+
+  function seekToLine(start: number) {
+    if (!ready || start >= transcriptLimit) return;
+    playerRef.current?.seekTo(start, true);
+    setCurrentTime(start);
+    const idx = analysis.chapters.reduce((best, ch, i) => (start >= ch.startTime ? i : best), 0);
+    setActiveChapter(idx);
+  }
+
+  async function copyTranscript() {
+    const text = analysis.transcript.map(l => `[${fmt(l.start)}] ${l.text}`).join('\n');
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch { /* clipboard can be blocked in sandboxed iframes — nothing to do */ }
   }
 
   // Free playback within the current chapter — rewind has no floor besides
@@ -1349,14 +1394,14 @@ function ImmersivePlayer({ analysis }: { analysis: VideoAnalysis }) {
         {/* Workspace header */}
         <div className="shrink-0 flex items-center justify-between px-5 border-b border-border" style={{ paddingTop: 10, paddingBottom: 10 }}>
           <div className="flex gap-5">
-            {(['roadmap', 'captures'] as const).map(tab => (
+            {(['roadmap', 'transcript', 'captures'] as const).map(tab => (
               <button
                 key={tab}
                 onClick={() => setWorkspace(tab)}
                 className="text-sm font-semibold transition-colors"
                 style={{ color: workspace === tab ? '#131927' : '#9ea2ae' }}
               >
-                {tab === 'captures' ? `Notes (${captures.length})` : 'Chapters'}
+                {tab === 'captures' ? `Notes (${captures.length})` : tab === 'transcript' ? 'Transcript' : 'Chapters'}
               </button>
             ))}
           </div>
@@ -1426,6 +1471,50 @@ function ImmersivePlayer({ analysis }: { analysis: VideoAnalysis }) {
                   </button>
                 );
               })}
+            </div>
+          ) : workspace === 'transcript' ? (
+            <div className="px-4 py-3">
+              {analysis.transcript.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-10 text-center">
+                  <p className="text-sm text-muted-foreground max-w-xs">
+                    No transcript for this video. It has no captions to read.
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <div className="flex items-center justify-between px-1 pb-2">
+                    <span className="text-[11px] text-muted-foreground">Tap a line to jump there</span>
+                    <button
+                      onClick={copyTranscript}
+                      className="flex items-center gap-1 text-[11px] font-semibold text-muted-foreground"
+                    >
+                      {copied ? <Check size={11} /> : <Copy size={11} />}
+                      {copied ? 'Copied' : 'Copy'}
+                    </button>
+                  </div>
+                  {analysis.transcript.map((l, i) => {
+                    const isActive = i === activeLineIdx;
+                    const isLocked = l.start >= transcriptLimit;
+                    return (
+                      <button
+                        key={i}
+                        ref={isActive ? activeLineRef : undefined}
+                        onClick={() => seekToLine(l.start)}
+                        disabled={isLocked}
+                        className="w-full flex items-start gap-3 py-2 px-3 rounded-xl mb-0.5 text-left transition-all disabled:cursor-not-allowed"
+                        style={{
+                          background: isActive ? '#F8FDE7' : 'transparent',
+                          border:     isActive ? '1px solid #c8f135' : '1px solid transparent',
+                          opacity:    isLocked ? 0.45 : 1,
+                        }}
+                      >
+                        <span className="text-[11px] text-muted-foreground shrink-0 mt-0.5 w-9">{fmt(l.start)}</span>
+                        <span className="text-sm leading-snug" style={{ color: isActive ? '#131927' : '#394050' }}>{l.text}</span>
+                      </button>
+                    );
+                  })}
+                </>
+              )}
             </div>
           ) : (
             <div className="px-5 py-4">
