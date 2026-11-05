@@ -171,12 +171,28 @@ async function openWithFallback(url: string, queryLabel: string) {
     window.open(url, '_blank', 'noopener');
     return;
   }
-  const win = window.open('', '_blank', 'noopener');
+  // No 'noopener' here: with it, window.open() returns null, so there'd be no tab
+  // handle to redirect and the blank tab would never navigate. Severing the opener
+  // manually gives the same protection while keeping the handle.
+  const win = window.open('', '_blank');
+  if (win) {
+    win.opener = null;
+    // Show something in the new tab while the lookup runs, so a slow search never
+    // looks like a broken "about:blank" page.
+    try {
+      win.document.title = 'Opening…';
+      win.document.body.style.cssText =
+        'margin:0;display:flex;align-items:center;justify-content:center;height:100vh;font-family:system-ui,sans-serif;background:#111;color:#bbb;font-size:15px';
+      win.document.body.textContent = 'Finding the best link…';
+    } catch { /* cross-origin or blocked — harmless, tab just stays blank until redirect */ }
+  }
   try {
-    const { data, error } = await supabase.functions.invoke('resource-link', {
-      body: { query: queryLabel },
-    });
-    const realUrl = !error && data?.url ? data.url : url; // fall back to the original search link if the lookup fails
+    // Never wait longer than 12s: if the lookup hangs, send the user to the original
+    // search link instead of leaving the tab empty.
+    const lookup = supabase.functions.invoke('resource-link', { body: { query: queryLabel } });
+    const timeout = new Promise<null>(resolve => setTimeout(() => resolve(null), 12_000));
+    const result = await Promise.race([lookup, timeout]);
+    const realUrl = result && !result.error && result.data?.url ? result.data.url : url; // fall back to the original search link if the lookup fails or times out
     if (win) win.location.href = realUrl;
     else window.open(realUrl, '_blank', 'noopener'); // popup was already blocked regardless — best effort
   } catch {
@@ -342,11 +358,24 @@ function ResourceActions({ resources, stepId }: { resources: RoadmapResource[]; 
 }
 
 // ─── Step-completion quiz gate (shared by StepCard + TodayTaskRow) ──────────────
-// watch-type steps require passing a quiz before toggleStep fires — see
-// QuizModal.tsx. Only 'watch' gates (per product decision): read/build/practice
-// steps toggle immediately, same as before this feature existed. Un-completing
+// EVERY step type (watch, read, build, practice) requires passing a quiz before
+// toggleStep fires — see QuizModal.tsx. (Originally only 'watch' gated; product
+// decision changed so all step types gate.) Un-completing
 // an already-done step never re-gates — the gate only stands between "not done"
 // and "done", not between "done" and "not done".
+// OPT-IN test mode (off by default, in dev and in production): skips the quiz so you can
+// tick steps instantly to check that Inspire (Posts + Videos) changes level. Turn on with,
+// in the browser console, then reload:
+//   localStorage.setItem('navigator-test-mode', '1')
+// Turn off again with:  localStorage.removeItem('navigator-test-mode')
+function isTestMode(): boolean {
+  try {
+    return localStorage.getItem('navigator-test-mode') === '1';
+  } catch {
+    return false;
+  }
+}
+
 function useStepCompletionGate(entry: RoadmapEntry, step: RoadmapStep) {
   const { toggleStep } = useApp();
   const [quizOpen, setQuizOpen] = useState(false);
@@ -354,13 +383,14 @@ function useStepCompletionGate(entry: RoadmapEntry, step: RoadmapStep) {
 
   function onCheckboxClick() {
     if (done) { toggleStep(entry.id, step.id); return; } // un-checking never gates
-    if (step.type !== 'watch') { toggleStep(entry.id, step.id); return; }
+    if (isTestMode()) { toggleStep(entry.id, step.id); return; } // opt-in test bypass only
     setQuizOpen(true);
   }
 
   const quizModal = quizOpen && (
     <QuizModal
       skill={entry.roadmap.skill}
+      entryId={entry.id}
       step={step}
       onClose={() => setQuizOpen(false)}
       onPass={() => {
@@ -2588,10 +2618,11 @@ function PartnerCard({ partner }: { partner: PartnerStatus }) {
   const [open, setOpen] = useState(true);
 
   return (
-    <div
-      className="rounded-2xl p-4 mb-3"
-      style={{ background: '#F8FDE7', border: '1px solid #d2f25e' }}
-    >
+    // bg-accent (the app's green surface token) instead of a hard-coded #F8FDE7:
+    // everything inside this card uses theme text colors (text-foreground etc.),
+    // which turn near-white in dark mode — on a fixed light background the task
+    // titles became invisible. A themed surface keeps text readable in both modes.
+    <div className="rounded-2xl p-4 mb-3 bg-accent border border-border">
       <button
         type="button"
         onClick={() => hasPlan && setOpen(o => !o)}
@@ -2602,8 +2633,8 @@ function PartnerCard({ partner }: { partner: PartnerStatus }) {
         aria-expanded={hasPlan ? open : undefined}
       >
         <div
-          className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 text-sm font-bold text-foreground"
-          style={{ background: '#c8f135' }}
+          className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 text-sm font-bold"
+          style={{ background: '#c8f135', color: '#1a2400' }}
         >
           {name.slice(0, 1).toUpperCase()}
         </div>
@@ -4826,7 +4857,7 @@ interface ShortsFeedResult {
 }
 
 async function buildShortsFeed(
-  roadmapRefs: { entryId: string; skill: string }[],
+  roadmapRefs: { entryId: string; skill: string; query: string }[],
   discoverFallback: InspireCard[],
   ensureRelatedSkills: (entryId: string) => Promise<string[]>,
   // Called once per skill, as soon as THAT skill's search resolves — not
@@ -4876,10 +4907,12 @@ async function buildShortsFeed(
   if (roadmapRefs.length > 0) {
     await Promise.all(
       roadmapRefs.map(async (ref) => {
-        const r = await fetchFeedCandidates(ref.skill);
+        const r = await fetchFeedCandidates(ref.query);
         const cursor: SkillCursor = {
           entryId: ref.entryId,
-          skill: ref.skill,
+          // `skill` is what pagination re-sends to YouTube search, so it carries the
+          // level-adjusted query ("<skill> advanced"), not the bare skill name.
+          skill: ref.query,
           pageToken: r.nextPageToken,
           exhausted: r.nextPageToken === null,
         };
@@ -5013,8 +5046,10 @@ interface InspireCacheEntry {
 }
 let inspireCache: { key: string; entry: InspireCacheEntry } | null = null;
 
-function inspireCacheKey(roadmapRefs: { entryId: string; skill: string }[]): string {
-  return roadmapRefs.map(r => r.entryId).sort().join(',');
+function inspireCacheKey(roadmapRefs: { entryId: string; skill: string; query: string }[]): string {
+  // query is included so the cached feed is dropped when the learner's phase (and so the
+  // level words in the query) changes.
+  return roadmapRefs.map(r => `${r.entryId}:${r.query}`).sort().join(',');
 }
 
 function InspireView() {
@@ -5029,14 +5064,14 @@ function InspireView() {
   // skill_web.adjacent for that SPECIFIC roadmap — see buildShortsFeed.
   const roadmapRefs = useMemo(() => {
     const seen = new Set<string>();
-    const result: { entryId: string; skill: string }[] = [];
+    const result: { entryId: string; skill: string; query: string }[] = [];
     sortedRoadmaps(state.roadmaps).forEach(entry => {
       const skill = entry.roadmap.skill?.trim();
       if (!skill) return;
       const key = skill.toLowerCase();
       if (seen.has(key)) return;
       seen.add(key);
-      result.push({ entryId: entry.id, skill });
+      result.push({ entryId: entry.id, skill, query: videoQueryForLevel(skill, currentPostsLevel(entry)) });
     });
     return result;
   }, [state.roadmaps]);
@@ -5274,8 +5309,441 @@ function InspireView() {
   );
 }
 
+// ─── Inspire: Videos / Posts switcher ──────────────────────────────────────────
+// Videos = the existing YouTube shorts feed (InspireView, untouched).
+// Posts  = article/thread links from Google, Reddit and Quora for the user's
+// roadmap skills, fetched through the post-search edge function (Searlo first,
+// Serper as backup — see that function's header). Results are cached server-side
+// for a week and, below, per session so flipping between Videos and Posts
+// doesn't re-hit the network.
+
+type InspireMode = 'videos' | 'posts';
+type PostSource = 'google' | 'reddit' | 'quora';
+interface InspirePost {
+  title: string;
+  url: string;
+  snippet: string;
+  source: PostSource;
+  domain: string;
+}
+
+const POST_SOURCE_META: Record<PostSource, { label: string; color: string }> = {
+  google: { label: 'Google', color: '#4285f4' },
+  reddit: { label: 'Reddit', color: '#ff4500' },
+  quora:  { label: 'Quora',  color: '#b92b27' },
+};
+
+// YouTube search query for the Videos feed, pitched at the learner's current level.
+const VIDEO_LEVEL_WORDS: Record<number, string> = {
+  0: 'for beginners',
+  1: 'tutorial',
+  2: 'intermediate',
+  3: 'advanced',
+  4: 'expert masterclass',
+};
+function videoQueryForLevel(skill: string, level: number): string {
+  return `${skill} ${VIDEO_LEVEL_WORDS[Math.min(4, Math.max(0, level))]}`;
+}
+
+// Level used to pitch Posts, based on the phase the learner is CURRENTLY in (first
+// phase that still has an unfinished step), not just the level picked at creation.
+// Foundations -> beginner, Intermediate -> 2, Advanced -> 3, Mastery -> 4. A roadmap
+// that started at Advanced has phases [Advanced, Mastery], so it begins at 3 and
+// moves to 4 once the Advanced phase is finished. Everything done -> last phase.
+function currentPostsLevel(entry: any): number {
+  const rm = entry?.roadmap;
+  const start = typeof rm?.level === 'number' ? rm.level : 0;
+  const phases: any[] = Array.isArray(rm?.phases) ? rm.phases : [];
+  if (phases.length === 0) return start;
+  const progress = entry?.progress ?? {};
+  let idx = phases.findIndex(p => (p?.steps ?? []).some((s: any) => !progress[s.id]));
+  if (idx === -1) idx = phases.length - 1;
+  const title = String(phases[idx]?.title ?? '').toLowerCase();
+  if (/mastery|expert/.test(title)) return 4;
+  if (/advanced/.test(title)) return 3;
+  if (/intermediate/.test(title)) return 2;
+  if (/foundation|basic|beginner|introduction|fundamental/.test(title)) return Math.min(start, 1);
+  // Unrecognised (renamed) phase title: fall back to start level + position.
+  return Math.min(4, start + idx);
+}
+
+// globalThis.Map, not bare Map — lucide's Map icon shadows the global here.
+const postsCache = new globalThis.Map<string, InspirePost[]>();
+
+function PostsView() {
+  const { state } = useApp();
+
+  // Unique skills across all the user's roadmaps (same dedupe as InspireView).
+  const { skills, levelBySkill } = useMemo(() => {
+    const seen = new Set<string>();
+    const out: string[] = [];
+    const levels: Record<string, number> = {};
+    sortedRoadmaps(state.roadmaps).forEach(entry => {
+      const skill = entry.roadmap.skill?.trim();
+      if (!skill) return;
+      const key = skill.toLowerCase();
+      if (seen.has(key)) return;
+      seen.add(key);
+      out.push(skill);
+      // Follows the learner's current phase; old roadmaps with no saved level -> beginner.
+      levels[key] = currentPostsLevel(entry);
+    });
+    return { skills: out, levelBySkill: levels };
+  }, [state.roadmaps]);
+
+  const [selected, setSelected] = useState<string | null>(null);
+  const [sourceFilter, setSourceFilter] = useState<'all' | PostSource>('all');
+  const [posts, setPosts] = useState<InspirePost[] | null>(null);
+  const [failed, setFailed] = useState(false);
+  const [failDetail, setFailDetail] = useState('');
+  const [retryTick, setRetryTick] = useState(0);
+
+  // Falls back to the first skill if nothing is picked yet or the picked one
+  // no longer exists (roadmap deleted).
+  const activeSkill = selected && skills.includes(selected) ? selected : (skills[0] ?? null);
+
+  const activeLevel = activeSkill ? (levelBySkill[activeSkill.toLowerCase()] ?? 0) : 0;
+
+  useEffect(() => {
+    if (!activeSkill) return;
+    // Level is part of the cache key so a beginner's results never get served
+    // for an advanced roadmap of the same skill.
+    const key = `${activeSkill.toLowerCase()}|${activeLevel}`;
+    const hit = postsCache.get(key);
+    if (hit) {
+      setPosts(hit);
+      setFailed(false);
+      return;
+    }
+    let cancelled = false;
+    setPosts(null);
+    setFailed(false);
+    setFailDetail('');
+    supabase.functions
+      .invoke('post-search', { body: { query: activeSkill, level: activeLevel } })
+      .then(async ({ data, error }) => {
+        if (cancelled) return;
+        // Tolerate a JSON string body, just in case the response wasn't auto-parsed.
+        let payload: any = data;
+        if (typeof payload === 'string') {
+          try { payload = JSON.parse(payload); } catch { /* leave as string */ }
+        }
+        if (error || !Array.isArray(payload?.posts)) {
+          // Work out WHY, so the failure screen can say something useful instead of
+          // a generic message (and the console has the raw details).
+          let detail = '';
+          try {
+            const ctx = (error as any)?.context;
+            if (ctx && typeof ctx.json === 'function') {
+              const body = await ctx.json();
+              detail = body?.error ?? JSON.stringify(body);
+              if (ctx.status) detail = `${ctx.status}: ${detail}`;
+            } else if (error) {
+              detail = String((error as any).message ?? error);
+            } else {
+              detail = 'Unexpected reply: ' + JSON.stringify(payload).slice(0, 200);
+            }
+          } catch {
+            detail = error ? String((error as any).message ?? error) : 'Unreadable reply';
+          }
+          console.error('[PostsView] post-search failed:', { error, data });
+          if (cancelled) return;
+          setFailDetail(detail.slice(0, 240));
+          setFailed(true);
+          return;
+        }
+        postsCache.set(key, payload.posts as InspirePost[]);
+        setPosts(payload.posts as InspirePost[]);
+      })
+      .catch((e: unknown) => {
+        console.error('[PostsView] post-search threw:', e);
+        if (!cancelled) {
+          setFailDetail(String((e as any)?.message ?? e).slice(0, 240));
+          setFailed(true);
+        }
+      });
+    return () => { cancelled = true; };
+  }, [activeSkill, activeLevel, retryTick]);
+
+  const handleRetry = () => {
+    if (activeSkill) postsCache.delete(`${activeSkill.toLowerCase()}|${activeLevel}`);
+    setRetryTick(t => t + 1);
+  };
+
+  const visible = (posts ?? []).filter(p => sourceFilter === 'all' || p.source === sourceFilter);
+
+  const chip = (active: boolean) =>
+    `shrink-0 px-3.5 py-1.5 rounded-full text-[12px] font-semibold transition-colors ${
+      active ? 'bg-primary text-foreground' : 'bg-muted text-muted-foreground'
+    }`;
+
+  return (
+    <div className="h-full overflow-y-auto bg-background">
+      {/* pt-16 clears the Videos/Posts switcher floating at the top-left */}
+      <div className="px-4 pt-16 pb-6">
+        {skills.length > 1 && (
+          <div className="flex gap-2 overflow-x-auto pb-3 -mx-4 px-4">
+            {skills.map(skill => (
+              <button key={skill} onClick={() => setSelected(skill)} className={chip(skill === activeSkill)}>
+                {skill}
+              </button>
+            ))}
+          </div>
+        )}
+
+        <div className="flex gap-2 mb-4 overflow-x-auto">
+          {(['all', 'google', 'reddit', 'quora'] as const).map(src => (
+            <button key={src} onClick={() => setSourceFilter(src)} className={chip(sourceFilter === src)}>
+              {src === 'all' ? 'All' : POST_SOURCE_META[src].label}
+            </button>
+          ))}
+        </div>
+
+        {!activeSkill ? (
+          <div className="flex flex-col items-center text-center pt-16">
+            <div className="w-14 h-14 rounded-2xl bg-accent flex items-center justify-center mb-4">
+              <Globe size={22} className="text-primary" />
+            </div>
+            <p className="text-sm font-semibold text-foreground mb-1">No posts yet</p>
+            <p className="text-xs text-muted-foreground max-w-[260px]">
+              Create a roadmap and we'll find articles and discussions for your skill.
+            </p>
+          </div>
+        ) : failed ? (
+          <div className="flex flex-col items-center text-center pt-16">
+            <p className="text-sm font-semibold text-foreground mb-1">Couldn't load posts</p>
+            <p className="text-xs text-muted-foreground max-w-[260px] mb-4">
+              Something went wrong while searching. Check your connection and try again.
+            </p>
+            {failDetail && (
+              <p className="text-[10px] text-muted-foreground/70 max-w-[300px] mb-4 break-words font-mono">
+                {failDetail}
+              </p>
+            )}
+            <button onClick={handleRetry} className="px-5 py-2 bg-primary text-foreground text-xs font-semibold rounded-full">
+              Try again
+            </button>
+          </div>
+        ) : posts === null ? (
+          <div className="flex items-center justify-center pt-24">
+            <div className="w-6 h-6 border-2 border-border border-t-foreground rounded-full animate-spin" />
+          </div>
+        ) : visible.length === 0 ? (
+          <div className="flex flex-col items-center text-center pt-16">
+            <p className="text-sm font-semibold text-foreground mb-1">Nothing here</p>
+            <p className="text-xs text-muted-foreground max-w-[260px]">
+              No {sourceFilter === 'all' ? '' : POST_SOURCE_META[sourceFilter].label + ' '}posts found for {activeSkill} right now.
+            </p>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-3">
+            {visible.map(post => {
+              const meta = POST_SOURCE_META[post.source];
+              return (
+                <a
+                  key={post.url}
+                  href={post.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block rounded-2xl border border-border bg-background p-4 active:bg-muted transition-colors"
+                >
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-[11px] font-bold" style={{ color: meta.color }}>{meta.label}</span>
+                    <ExternalLink size={13} className="text-muted-foreground" />
+                  </div>
+                  <p className="text-[14px] font-semibold text-foreground leading-snug line-clamp-2">{post.title}</p>
+                  {post.snippet && (
+                    <p className="text-[12px] text-muted-foreground leading-snug mt-1 line-clamp-3">{post.snippet}</p>
+                  )}
+                  <p className="text-[11px] text-muted-foreground mt-2 truncate">{post.domain}</p>
+                </a>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function InspireTab() {
+  const [mode, setMode] = useState<InspireMode>('videos');
+  const [open, setOpen] = useState(false);
+
+  const OPTIONS: { id: InspireMode; label: string; Icon: typeof Play }[] = [
+    { id: 'videos', label: 'Videos', Icon: Play },
+    { id: 'posts',  label: 'Posts',  Icon: Globe },
+  ];
+  const current = OPTIONS.find(o => o.id === mode)!;
+
+  return (
+    <div className="relative h-full">
+      {mode === 'videos' ? <InspireView /> : <PostsView />}
+
+      {/* Tap-outside catcher — absolute (not fixed) so it stays inside this tab */}
+      {open && <div className="absolute inset-0 z-20" onClick={() => setOpen(false)} />}
+
+      <div className="absolute top-3 left-3 z-30">
+        <button
+          onClick={() => setOpen(o => !o)}
+          className="flex items-center gap-1.5 pl-3.5 pr-2.5 py-1.5 rounded-full bg-black/60 backdrop-blur text-white text-[13px] font-semibold"
+        >
+          {current.label}
+          <ChevronDown size={15} className={`transition-transform ${open ? 'rotate-180' : ''}`} />
+        </button>
+
+        {open && (
+          <div className="absolute top-full left-0 mt-2 w-44 rounded-2xl bg-background border border-border shadow-lg overflow-hidden">
+            {OPTIONS.map(({ id, label, Icon }) => (
+              <button
+                key={id}
+                onClick={() => { setMode(id); setOpen(false); }}
+                className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-left hover:bg-muted"
+              >
+                <Icon size={15} className="text-muted-foreground" />
+                <span className="flex-1 text-[13px] font-semibold text-foreground">{label}</span>
+                {mode === id && <Check size={15} className="text-primary" />}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ─── Main App ──────────────────────────────────────────────────────────────────
 
+
+// ─── Hidden test panel ─────────────────────────────────────────────────────────
+// Type 45678 anywhere (outside a text box) to open/close. Lists your roadmaps and asks
+// which one to work on (or all of them), then completes / undoes steps for it so you can
+// check how Inspire (Posts + Videos) changes level. It goes through the app's normal
+// toggleStep, one step at a time, so it behaves exactly like ticking the circles by hand
+// (progress, XP and streak included).
+const TEST_CODE = '45678';
+const TEST_LEVEL_LABELS = ['Complete Beginner', 'Beginner', 'Intermediate', 'Advanced', 'Expert'];
+
+type TestAction = 'next-phase' | 'all' | 'undo';
+
+function TestPanel() {
+  const { state, toggleStep } = useApp();
+  const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState<string | null>(null); // 'all' or a roadmap entry id
+  const [busy, setBusy] = useState(false);
+  const [status, setStatus] = useState('');
+
+  // Latest state/toggleStep, so a long run never acts on a stale copy from when it started.
+  const stateRef = useRef(state);
+  const toggleRef = useRef(toggleStep);
+  stateRef.current = state;
+  toggleRef.current = toggleStep;
+
+  useEffect(() => {
+    let buf = '';
+    const onKey = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement | null;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+      if (e.ctrlKey || e.metaKey || e.altKey || e.key.length !== 1) return;
+      buf = (buf + e.key).slice(-TEST_CODE.length);
+      if (buf === TEST_CODE) { buf = ''; setOpen(o => !o); }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  if (!open) return null;
+
+  const roadmaps = sortedRoadmaps(state.roadmaps);
+
+  const counts = (entry: RoadmapEntry) => {
+    const steps = (entry.roadmap.phases ?? []).flatMap(p => p.steps ?? []);
+    return { done: steps.filter(s => entry.progress[s.id]).length, total: steps.length };
+  };
+
+  async function run(action: TestAction) {
+    if (!selected || busy) return;
+    const targets = selected === 'all' ? roadmaps : roadmaps.filter(e => e.id === selected);
+
+    // Work out the steps to flip up front, then flip them one at a time.
+    const jobs: { entryId: string; stepId: string; wantDone: boolean }[] = [];
+    for (const entry of targets) {
+      const phases = entry.roadmap.phases ?? [];
+      if (action === 'undo') {
+        phases.forEach(p => (p.steps ?? []).forEach(s => {
+          if (entry.progress[s.id]) jobs.push({ entryId: entry.id, stepId: s.id, wantDone: false });
+        }));
+      } else if (action === 'all') {
+        phases.forEach(p => (p.steps ?? []).forEach(s => {
+          if (!entry.progress[s.id]) jobs.push({ entryId: entry.id, stepId: s.id, wantDone: true });
+        }));
+      } else {
+        const phase = phases.find(p => (p.steps ?? []).some(s => !entry.progress[s.id]));
+        (phase?.steps ?? []).forEach(s => {
+          if (!entry.progress[s.id]) jobs.push({ entryId: entry.id, stepId: s.id, wantDone: true });
+        });
+      }
+    }
+
+    if (jobs.length === 0) { setStatus('Nothing to change.'); return; }
+    setBusy(true);
+    for (let i = 0; i < jobs.length; i++) {
+      const job = jobs[i];
+      const cur = stateRef.current.roadmaps.find(e => e.id === job.entryId);
+      const isDone = !!cur?.progress?.[job.stepId];
+      if (isDone !== job.wantDone) toggleRef.current(job.entryId, job.stepId);
+      setStatus(`Working… ${i + 1}/${jobs.length}`);
+      // Pause so each update lands before the next toggle.
+      await new Promise(r => setTimeout(r, 120));
+    }
+    setStatus(`Done — changed ${jobs.length} step${jobs.length === 1 ? '' : 's'}.`);
+    setBusy(false);
+  }
+
+  const btn = 'px-3 py-2 rounded-full text-[12px] font-semibold disabled:opacity-40 disabled:cursor-not-allowed';
+
+  return (
+    <div className="fixed top-3 right-3 z-[70] w-[340px] max-w-[calc(100vw-24px)] max-h-[85vh] overflow-y-auto rounded-2xl border border-border bg-background text-foreground shadow-xl p-3">
+      <div className="flex items-center justify-between mb-1">
+        <p className="text-sm font-bold">Which roadmap do you want to tick off?</p>
+        <button onClick={() => setOpen(false)} aria-label="Close test panel" className="w-7 h-7 rounded-full hover:bg-muted text-muted-foreground">✕</button>
+      </div>
+      <p className="text-[11px] text-muted-foreground mb-2">Pick one, or all of them.</p>
+
+      {roadmaps.length === 0 ? (
+        <p className="text-[12px] text-muted-foreground py-2">No roadmaps yet.</p>
+      ) : (
+        <div className="flex flex-col gap-1.5">
+          <label className={`flex items-center gap-2 p-2.5 rounded-xl cursor-pointer ${selected === 'all' ? 'bg-accent' : 'bg-card'}`}>
+            <input type="radio" name="test-target" checked={selected === 'all'} onChange={() => setSelected('all')} />
+            <span className="text-[13px] font-semibold">All roadmaps ({roadmaps.length})</span>
+          </label>
+          {roadmaps.map(entry => {
+            const { done, total } = counts(entry);
+            return (
+              <label key={entry.id} className={`flex items-center gap-2 p-2.5 rounded-xl cursor-pointer ${selected === entry.id ? 'bg-accent' : 'bg-card'}`}>
+                <input type="radio" name="test-target" checked={selected === entry.id} onChange={() => setSelected(entry.id)} />
+                <span className="min-w-0">
+                  <span className="block text-[13px] font-semibold truncate">{entry.roadmap.skill}</span>
+                  <span className="block text-[11px] text-muted-foreground">
+                    {done}/{total} steps · Inspire level: {TEST_LEVEL_LABELS[currentPostsLevel(entry)] ?? '?'}
+                  </span>
+                </span>
+              </label>
+            );
+          })}
+        </div>
+      )}
+
+      <div className="flex flex-wrap gap-2 mt-3">
+        <button disabled={!selected || busy} onClick={() => run('next-phase')} className={`${btn} bg-primary text-foreground`}>Complete next phase</button>
+        <button disabled={!selected || busy} onClick={() => run('all')} className={`${btn} bg-muted`}>Complete everything</button>
+        <button disabled={!selected || busy} onClick={() => run('undo')} className={`${btn} bg-muted`}>Undo everything</button>
+      </div>
+      {status && <p className="text-[11px] text-muted-foreground mt-2">{status}</p>}
+    </div>
+  );
+}
 
 export function Main() {
   const navigate = useNavigate();
@@ -5393,7 +5861,7 @@ export function Main() {
       {tab === 'today'   && <TodayView entry={activeEntry} />}
       {tab === 'roadmap' && <RoadmapListView />}
       {tab === 'chat'    && <Chat />}
-      {tab === 'inspire' && <InspireView />}
+      {tab === 'inspire' && <InspireTab />}
       {tab === 'profile' && <ProfileView entry={activeEntry} onGoRoadmap={() => setTab('roadmap')} />}
     </>
   );
@@ -5439,6 +5907,7 @@ export function Main() {
         </main>
 
         <StreakInterruptModal onGoToToday={() => setTab('today')} />
+      <TestPanel />
       </div>
     );
   }
@@ -5462,6 +5931,7 @@ export function Main() {
           why the two are still coupled despite this component not asking
           for it. */}
       <StreakInterruptModal onGoToToday={() => setTab('today')} />
+      <TestPanel />
 
       {/* Bottom Nav (no FAB) */}
       <div className="shrink-0 h-[82px] bg-background border-t border-border flex items-center pb-3 px-4">

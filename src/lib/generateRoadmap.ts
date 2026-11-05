@@ -141,6 +141,10 @@ export interface Roadmap {
   // typing — callers reading it should treat a missing value as 'full'
   // (see MODE_BADGE in Main.tsx).
   mode?: 'full' | 'sprint' | 'youtube';
+  // Self-reported level picked on Gap.tsx (0 Complete Beginner … 4 Expert).
+  // Stamped in generateRoadmap(); optional because roadmaps saved before this
+  // field existed don't have it — readers should treat missing as beginner.
+  level?: number;
   phases: RoadmapPhase[];
   tools?: RoadmapTool[];
   experts?: RoadmapExpert[];
@@ -222,6 +226,7 @@ async function groqCall(system: string, user: string, maxTokens: number, kind?: 
       const body = await (error as any).context?.json?.();
       if (body?.error) msg = typeof body.error === 'string' ? body.error : (body.error.message ?? JSON.stringify(body.error));
     } catch {}
+
     throw new Error(msg);
   }
 
@@ -569,6 +574,7 @@ ${urlPolicy}`;
     sprint_plan: extras.sprint_plan ?? null,
   };
   roadmap.mode = mode; // stamp the real mode param — never trust the model to echo it back correctly
+  roadmap.level = lvl; // stamp the picked level so Inspire > Posts can pitch results at it
 
   // The JSON example in the prompt uses "s1" as the step id, so the model tends
   // to restart at s1/s2/... in every phase. Step ids are used as React keys and
